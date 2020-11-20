@@ -2,7 +2,41 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@{ 
+    List<string> myList = new List<string>();
+    myList.Add("One");
+    myList.Add("Two");
+    myList.Add("Three");
+    myList.Add("Four");
+    myList.Add("One");
+    myList.Add("Two");
+    myList.Add("Three");
+    myList.Add("Four");
+    myList.Add("One");
+    myList.Add("Two");
+    myList.Add("Three");
+    myList.Add("Four");
+    myList.Add("One");
+    myList.Add("Two");
+    myList.Add("Three");
+    myList.Add("Four");
+}
+
+<div class="row">
+    <div class="col-3">
+
+    </div>
+
+    <div class="col-6">
+        @foreach (var item in myList)
+        {
+            <div class="card">
+                <label style="text-align:center; margin-bottom: 0px; padding-bottom:10px; padding-top:10px">@item</label>
+            </div>
+        }
+    </div>
+
+    <div class="col-3">
+        <button>Add training</button>
+    </div>
 </div>
