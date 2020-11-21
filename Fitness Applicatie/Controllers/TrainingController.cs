@@ -8,7 +8,7 @@ namespace Fitness_Applicatie.Controllers
 {
     public class TrainingController : Controller
     {
-        public IActionResult Index()
+        public IActionResult AddTraining()
         {
             return View();
         }

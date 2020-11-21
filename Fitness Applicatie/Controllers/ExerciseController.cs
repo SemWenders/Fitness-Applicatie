@@ -8,9 +8,14 @@ namespace Fitness_Applicatie.Controllers
 {
     public class ExerciseController : Controller
     {
-        public IActionResult Index()
+        public IActionResult AddExercise()
         {
             return View();
+        }
+
+        public ActionResult AddExerciseToDb(Models.ExerciseViewModel exercise)
+        {
+            return LocalRedirect("/Home/Index");
         }
     }
 }

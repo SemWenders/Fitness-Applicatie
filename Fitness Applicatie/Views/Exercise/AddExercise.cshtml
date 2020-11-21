@@ -1,0 +1,34 @@
+﻿@model Fitness_Applicatie.Models.ExerciseViewModel
+
+@{ 
+    ViewData["Title"] = "Add Exercise";
+}
+
+<div class="row">
+    <div class="col-4">
+
+    </div>
+
+    <div class="col-4">
+        <form asp-action="AddExerciseToDb" method="post">
+            <div class="form-group text-center">
+                <label asp-for="Name"></label>
+                <input asp-for="Name"/>
+            </div>
+            <br />
+            <div class="form-group text-center">
+                <label asp-for="BodyWeight">Are you training on bodyweight?</label>
+                <br />
+                <input type="radio" name="bodyweight" asp-for="BodyWeight" value="True"/>Yes
+                <input type="radio" name="bodyweight" asp-for="BodyWeight" value="False"/>No
+            </div>
+            <div class="form-group text-center">
+                <input type="submit" value="Add" class="btn-danger" />
+            </div>
+        </form>
+    </div>
+
+    <div class="col-4">
+
+    </div>
+</div>
