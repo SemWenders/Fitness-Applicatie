@@ -1,1 +1,34 @@
-﻿<h1>Training</h1>
+﻿@model Fitness_Applicatie.Models.TrainingViewModel
+ 
+@{ 
+    ViewData["Title"] = "Add Training";
+}
+
+<script src="~/js/addTraining.js"></script>
+
+<div class="row" id="training">
+    <div class="col-3">
+        <button onclick="addExerciseField()" id="addFieldButton">Add Exercise</button>
+    </div>
+
+    <div class="col-6">
+        <form id="trainingForm">
+            <div id="exerciseGroup" style="text-align:right">
+                <div class="form-group row" id="setGroup" style="display:inline">
+                    <label asp-for="Name" id="nameLbl"></label>
+                    <input asp-for="Name" />
+                    <label asp-for="Sets" id="setsLbl">Weights</label>
+                    <input asp-for="Sets" style="width: 10%; margin-bottom:16px"/>
+                    <button id="addSetButton" onclick="addSetField(this.id)" type="button">Add set</button>
+                    <br />
+                </div>
+            </div>
+            <br />
+            <br />
+        </form>
+    </div>
+
+    <div class="col-3">
+        
+    </div>
+</div>

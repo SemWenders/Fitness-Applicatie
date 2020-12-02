@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace Fitness_Applicatie.Models
 {
-    public class Training
+    public class TrainingViewModel
     {
-        public string Name { get; private set; }
+        public List<Models.ExerciseViewModel> Name { get; set; }
+        public List<int> Sets { get; set; }
     }
 }
