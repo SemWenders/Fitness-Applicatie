@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Fitness_Applicatie_Interface\FitTracker.Interface.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitTracker.Logic", "Fitness
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FitTracker.Interface", "Fitness_Applicatie_Interface\FitTracker.Interface.csproj", "{1E32AA72-CD89-4589-A614-8F169D5258E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FitTracker.Factory", "FitTracker.Factory\FitTracker.Factory.csproj", "{95817B61-EC52-469C-AFED-C8F77A04E791}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{1E32AA72-CD89-4589-A614-8F169D5258E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E32AA72-CD89-4589-A614-8F169D5258E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E32AA72-CD89-4589-A614-8F169D5258E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95817B61-EC52-469C-AFED-C8F77A04E791}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95817B61-EC52-469C-AFED-C8F77A04E791}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95817B61-EC52-469C-AFED-C8F77A04E791}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95817B61-EC52-469C-AFED-C8F77A04E791}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

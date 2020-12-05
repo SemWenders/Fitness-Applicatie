@@ -10,6 +10,6 @@ namespace FitTracker.Interface.DTOs
         public string UserID { get; private set; }
         public DateTime Date { get; private set; }
         public List<ExerciseDTO> ExerciseNames { get; private set; }
-        public List<int> Sets { get; private set; } //list of weight of each set
+        public List<SetDTO> Sets { get; private set; } //list of weight of each set
     }
 }

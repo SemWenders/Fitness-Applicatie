@@ -10,7 +10,7 @@ namespace FitTracker.Factory
     {
         static IExerciseDAL GetExerciseDAL()
         {
-            return new ExerciseDAL;
+            return new ExerciseDAL();
         }
     }
 }

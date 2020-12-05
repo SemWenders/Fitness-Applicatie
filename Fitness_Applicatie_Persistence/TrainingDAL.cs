@@ -82,5 +82,10 @@ namespace FitTracker.Persistence
                 connection.Close();
             }
         }
+
+        public List<TrainingDTO> GetTrainings(UserDTO user)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

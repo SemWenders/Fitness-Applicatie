@@ -9,5 +9,6 @@ namespace FitTracker.Interface.Interfaces
     {
         public void AddTraining(TrainingDTO trainingDTO);
         public void DeleteTraining(TrainingDTO trainingDTO);
+        public List<TrainingDTO> GetTrainings(UserDTO user);
     }
 }
