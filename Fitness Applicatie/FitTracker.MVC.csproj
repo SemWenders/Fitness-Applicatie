@@ -11,4 +11,8 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Fitness_Applicatie_Persistence\FitTracker.Persistence.csproj" />
+  </ItemGroup>
+
 </Project>

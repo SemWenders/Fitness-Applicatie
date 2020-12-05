@@ -8,6 +8,6 @@ namespace FitTracker.Interface.Interfaces
     public interface ITrainingDAL
     {
         public void AddTraining(TrainingDTO trainingDTO);
-        public void DeleteTraining();
+        public void DeleteTraining(TrainingDTO trainingDTO);
     }
 }
