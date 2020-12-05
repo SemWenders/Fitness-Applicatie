@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fitness_Applicatie_Interface\FitTracker.Interface.csproj" />
+    <ProjectReference Include="..\Fitness_Applicatie_Persistence\FitTracker.Persistence.csproj" />
+  </ItemGroup>
+
+</Project>
