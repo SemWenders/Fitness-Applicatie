@@ -6,8 +6,9 @@ namespace FitTracker.Interface.DTOs
 {
     public class ExerciseDTO
     {
-        public string ExerciseID { get; private set; }
-        public bool BodyWeight { get; private set; }
+        public Guid ExerciseID { get; private set; }
         public string Name { get; private set; }
+        public Guid UserID { get; private set; }
+        public ExerciseType ExerciseType { get; private set; }
     }
 }

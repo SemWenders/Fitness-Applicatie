@@ -4,12 +4,10 @@ using System.Text;
 
 namespace FitTracker.Logic
 {
-    class Training
+    public class Training
     {
-        public string trainingID { get; private set; }
-        public string UserID { get; private set; }
-        public List<Exercise> ExercisesNames { get; private set; }
-        public DateTime Date { get; private set; }
-        public List<Set> Sets { get; private set; } //list of weight of each set
+        public string trainingID { get; set; }
+        public string UserID { get; set; }
+        public DateTime Date { get; set; }
     }
 }

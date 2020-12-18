@@ -4,8 +4,9 @@ using System.Text;
 
 namespace FitTracker.Logic
 {
-    class Set
+    public class Set
     {
-        public List<int> Weights { get; private set; }
+        public int Repitions { get; private set; }
+        public int Weight { get; private set; }
     }
 }

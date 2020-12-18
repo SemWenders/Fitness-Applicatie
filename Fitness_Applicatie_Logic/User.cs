@@ -1,30 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using FitTracker.Interface.Interfaces;
+using FitTracker.Interface.DTOs;
+using FitTracker.Factory;
 
 namespace FitTracker.Logic
 {
-    class User
+    public class User
     {
         //properties
         public string Name { get; private set; }
-        public string UserID { get; private set; }
+        public Guid UserID { get; set; }
         public string Password { get; private set; }
         public List<Training> Trainings { get; private set; }
         public List<Exercise> Exercises { get; private set; }
 
         //methods
-        void AddExercise(Exercise exercise)
+        public void AddExercise(Exercise exercise)
         {
-
+            IExerciseDAL exerciseDAL = ExerciseFactory.GetExerciseDAL();
+            exerciseDAL.AddExercise(new ExerciseDTO(exercise.Bodyweight, exercise.Name, exercise.UserID));
         }
 
-        void AddTraining(Training training)
+        public void AddTraining(Training training)
         {
-
+            ITrainingDAL trainingDAL = TrainingFactory.GetTrainingDAL();
+            TrainingDTO trainingDTO = new TrainingDTO
+            {
+                Date = training.Date,
+                Exercises = training.ExercisesNames.ConvertAll
+            };
+            trainingDAL.AddTraining(trainingDTO);
         }
 
-        void DeleteExercise(Exercise exercise)
+        public void DeleteExercise(Exercise exercise)
         {
 
         }
@@ -33,5 +43,21 @@ namespace FitTracker.Logic
         {
 
         }
+
+        List<TrainingDTO> GetUserTrainings()
+        {
+            ITrainingDAL trainingDAL = TrainingFactory.GetTrainingDAL();
+            List<TrainingDTO> trainings = trainingDAL.GetUserTrainings(UserID.ToString());
+            return trainings;
+        }
+
+        TrainingDTO GetTraining(string trainingID)
+        {
+            ITrainingDAL trainingDAL = TrainingFactory.GetTrainingDAL();
+            TrainingDTO training = trainingDAL.GetTraining(trainingID);
+            return training;
+        }
+
+        //TODO: converter method
     }
 }

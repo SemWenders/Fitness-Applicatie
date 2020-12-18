@@ -4,9 +4,8 @@ using System.Text;
 
 namespace FitTracker.Interface.DTOs
 {
-    public class SetDTO
+    class WeightTrainingDTO : TrainingDTO
     {
-        public int Repitions { get; private set; }
-        public int Weight { get; private set; }
+        public List<RoundDTO> Rounds { get; private set; }
     }
 }

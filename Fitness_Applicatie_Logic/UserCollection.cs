@@ -16,5 +16,10 @@ namespace FitTracker.Logic
         {
 
         }
+
+        void GetUser()
+        {
+
+        }
     }
 }
