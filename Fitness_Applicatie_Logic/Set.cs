@@ -8,5 +8,6 @@ namespace FitTracker.Logic
     {
         public int Repitions { get; private set; }
         public int Weight { get; private set; }
+        public Guid SetID { get; private set; }
     }
 }

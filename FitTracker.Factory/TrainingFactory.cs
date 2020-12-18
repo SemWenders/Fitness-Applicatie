@@ -6,9 +6,9 @@ using FitTracker.Persistence;
 
 namespace FitTracker.Factory
 {
-    static class TrainingFactory
+    public static class TrainingFactory
     {
-        static ITrainingDAL GetTrainingDAL()
+        public static ITrainingDAL GetTrainingDAL()
         {
             return new TrainingDAL();
         }

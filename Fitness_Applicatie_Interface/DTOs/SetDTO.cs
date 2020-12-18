@@ -6,7 +6,9 @@ namespace FitTracker.Interface.DTOs
 {
     public class SetDTO
     {
-        public int Repitions { get; private set; }
-        public int Weight { get; private set; }
+        public int Weight { get; set; }
+        public Guid SetID { get; set; }
+        public Guid RoundID { get; set; }
+        public int SetOrder { get; set; }
     }
 }

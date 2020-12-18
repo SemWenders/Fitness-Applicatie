@@ -7,8 +7,12 @@ namespace FitTracker.Interface.Interfaces
 {
     public interface ITrainingDAL
     {
-        public void AddTraining(TrainingDTO trainingDTO);
-        public void DeleteTraining(TrainingDTO trainingDTO);
-        public List<TrainingDTO> GetTrainings(UserDTO user);
+        public void AddWeightTraining(WeightTrainingDTO trainingDTO);
+        public void AddCardioTraining(CardioTrainingDTO trainingDTO);
+        public List<TrainingDTO> GetUserTrainings(string userID);
+        public WeightTrainingDTO GetWeightTraining(string trainingID);
+        public CardioTrainingDTO GetCardioTraining(string trainingID);
+        public void DeleteTraining(string trainingID);
+        public ExerciseDTO GetExerciseDTO(string exerciseID);
     }
 }

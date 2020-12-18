@@ -4,8 +4,8 @@ using System.Text;
 
 namespace FitTracker.Logic
 {
-    class WeightTraining : Training
+    public class WeightTraining : Training
     {
-        public List<Round> Rounds { get; private set; }
+        public List<Round> Rounds { get; set; }
     }
 }

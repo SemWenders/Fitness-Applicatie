@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Fitness_Applicatie_Interface\FitTracker.Interface.csproj" />
+    <ProjectReference Include="..\FitTracker.Factory\FitTracker.Factory.csproj" />
   </ItemGroup>
 
 </Project>

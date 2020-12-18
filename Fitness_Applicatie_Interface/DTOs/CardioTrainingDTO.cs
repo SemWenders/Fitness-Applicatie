@@ -6,8 +6,8 @@ namespace FitTracker.Interface.DTOs
 {
     public class CardioTrainingDTO : TrainingDTO
     {
-        public ExerciseDTO exercise { get; private set; }
-        public int Distance { get; private set; }
-        public TimeSpan time { get; private set; }
+        public ExerciseDTO Exercise { get; set; }
+        public decimal Distance { get; set; }
+        public TimeSpan Time { get; set; }
     }
 }

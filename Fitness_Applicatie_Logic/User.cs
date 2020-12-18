@@ -19,19 +19,17 @@ namespace FitTracker.Logic
         //methods
         public void AddExercise(Exercise exercise)
         {
-            IExerciseDAL exerciseDAL = ExerciseFactory.GetExerciseDAL();
-            exerciseDAL.AddExercise(new ExerciseDTO(exercise.Bodyweight, exercise.Name, exercise.UserID));
+
         }
 
-        public void AddTraining(Training training)
+        public void AddWeightTraining(WeightTraining training)
         {
-            ITrainingDAL trainingDAL = TrainingFactory.GetTrainingDAL();
-            TrainingDTO trainingDTO = new TrainingDTO
-            {
-                Date = training.Date,
-                Exercises = training.ExercisesNames.ConvertAll
-            };
-            trainingDAL.AddTraining(trainingDTO);
+
+        }
+
+        public void AddCardioTraining(CardioTraining cardioTraining)
+        {
+
         }
 
         public void DeleteExercise(Exercise exercise)
@@ -54,7 +52,7 @@ namespace FitTracker.Logic
         TrainingDTO GetTraining(string trainingID)
         {
             ITrainingDAL trainingDAL = TrainingFactory.GetTrainingDAL();
-            TrainingDTO training = trainingDAL.GetTraining(trainingID);
+            TrainingDTO training = trainingDAL.GetWeightTraining(trainingID);
             return training;
         }
 
