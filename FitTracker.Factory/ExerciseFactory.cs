@@ -6,9 +6,9 @@ using FitTracker.Interface.Interfaces;
 
 namespace FitTracker.Factory
 {
-    static class ExerciseFactory
+    public static class ExerciseFactory
     {
-        static IExerciseDAL GetExerciseDAL()
+        public static IExerciseDAL GetExerciseDAL()
         {
             return new ExerciseDAL();
         }
