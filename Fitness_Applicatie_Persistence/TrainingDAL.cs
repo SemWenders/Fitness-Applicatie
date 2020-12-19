@@ -12,12 +12,13 @@ namespace FitTracker.Persistence
     public class TrainingDAL : ITrainingDAL
     {
         //TODO: connection string in appsettings
+        string connectionString = "Data Source=LAPTOP-7SORRU5A; Initial Catalog=FitTracker; Integrated Security=SSPI;";
         string GetExerciseID(string ExerciseName)
         {
             string exerciseID = null;
-            using (SqlConnection connection = new SqlConnection())
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("spGetExerciseID"); //TODO: add stored procedure
+                SqlCommand cmd = new SqlCommand("spGetExerciseID");
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@ExerciseName", ExerciseName);
 
@@ -35,16 +36,66 @@ namespace FitTracker.Persistence
             return exerciseID;
         }
 
-        public void DeleteTraining(string trainingID)
+        public void DeleteWeightTraining(string trainingID)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("spDeleteTraining", connection); //TODO: Add stored procedure
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@TrainingID", trainingID);
+                SqlCommand cmdTraining = new SqlCommand("spDeleteTraining", connection);
+                cmdTraining.CommandType = System.Data.CommandType.StoredProcedure;
+                cmdTraining.Parameters.AddWithValue("@TrainingID", trainingID);
 
                 connection.Open();
-                cmd.ExecuteNonQuery();
+                cmdTraining.ExecuteNonQuery();
+                connection.Close();
+
+                SqlCommand cmdWeightTraining = new SqlCommand("spDeleteWeightTraining", connection);
+                cmdWeightTraining.CommandType = System.Data.CommandType.StoredProcedure;
+                cmdWeightTraining.Parameters.AddWithValue("@TrainingID", trainingID);
+
+                connection.Open();
+                cmdWeightTraining.ExecuteNonQuery();
+                connection.Close();
+
+                SqlCommand cmdRound = new SqlCommand("spDeleteRound", connection);
+                cmdRound.CommandType = System.Data.CommandType.StoredProcedure;
+                cmdRound.Parameters.AddWithValue("@TrainingID", trainingID);
+
+                connection.Open();
+                cmdRound.ExecuteNonQuery();
+                connection.Close();
+
+                List<RoundDTO> rounds = GetRounds(trainingID);
+                foreach (var round in rounds)
+                {
+                    SqlCommand cmdSet = new SqlCommand("spDeleteSet", connection);
+                    cmdSet.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmdSet.Parameters.AddWithValue("@RoundID", round.RoundID);
+
+                    connection.Open();
+                    cmdSet.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
+        }
+
+        public void DeleteCardioTraining(string trainingID)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand cmdTraining = new SqlCommand("spDeleteTraining", connection);
+                cmdTraining.CommandType = System.Data.CommandType.StoredProcedure;
+                cmdTraining.Parameters.AddWithValue("@TrainingID", trainingID);
+
+                connection.Open();
+                cmdTraining.ExecuteNonQuery();
+                connection.Close();
+
+                SqlCommand cmdCardioTraining = new SqlCommand("spDeleteCardioTraining", connection);
+                cmdCardioTraining.CommandType = System.Data.CommandType.StoredProcedure;
+                cmdCardioTraining.Parameters.AddWithValue("@TrainingID", trainingID);
+
+                connection.Open();
+                cmdCardioTraining.ExecuteNonQuery();
                 connection.Close();
             }
         }
@@ -54,7 +105,7 @@ namespace FitTracker.Persistence
             List<TrainingDTO> trainings = new List<TrainingDTO>();
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("spGetUserTrainings", connection); //TODO: add stored procedure
+                SqlCommand cmd = new SqlCommand("spGetUserTrainings", connection);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@UserID", userID);
 
@@ -79,7 +130,7 @@ namespace FitTracker.Persistence
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand cmdTraining = new SqlCommand("spGetTraining", connection); //TODO: add stored procedure
+                SqlCommand cmdTraining = new SqlCommand("spGetTraining", connection);
                 cmdTraining.CommandType = System.Data.CommandType.StoredProcedure;
                 cmdTraining.Parameters.AddWithValue("@TrainingID", trainingID);
 
@@ -96,7 +147,7 @@ namespace FitTracker.Persistence
                 }
                 connection.Close();
 
-                SqlCommand cmdRound = new SqlCommand("spGetRound", connection); //TODO: add stored procedure
+                SqlCommand cmdRound = new SqlCommand("spGetRound", connection);
                 cmdRound.CommandType = System.Data.CommandType.StoredProcedure;
                 cmdRound.Parameters.AddWithValue("@TrainingID", trainingID);
 
@@ -111,7 +162,7 @@ namespace FitTracker.Persistence
                         roundDTO.TrainingID = Guid.Parse(trainingID);
                         roundDTO.RoundID = Guid.Parse(reader["ID"].ToString());
 
-                        SqlCommand cmdSet = new SqlCommand("spGetSet", connection); //TODO: add stored procedure
+                        SqlCommand cmdSet = new SqlCommand("spGetSet", connection);
                         cmdSet.CommandType = System.Data.CommandType.StoredProcedure;
                         cmdSet.Parameters.AddWithValue("@RoundID", roundDTO.RoundID);
 
@@ -143,7 +194,7 @@ namespace FitTracker.Persistence
             {
                 CardioTrainingDTO cardioTrainingDTO = new CardioTrainingDTO();
                 
-                SqlCommand cmdTraining = new SqlCommand("spGetTraining", connection); //TODO: add stored procedure
+                SqlCommand cmdTraining = new SqlCommand("spGetTraining", connection);
                 cmdTraining.CommandType = System.Data.CommandType.StoredProcedure;
                 cmdTraining.Parameters.AddWithValue("@TrainingID", trainingID);
 
@@ -157,7 +208,7 @@ namespace FitTracker.Persistence
                     }
                 }
 
-                SqlCommand cmdCardioTraining = new SqlCommand("spGetCardioTraining", connection); //TODO: add stored procedure
+                SqlCommand cmdCardioTraining = new SqlCommand("spGetCardioTraining", connection);
                 cmdTraining.CommandType = System.Data.CommandType.StoredProcedure;
                 cmdTraining.Parameters.AddWithValue("@TrainingID", connection);
 
@@ -179,7 +230,7 @@ namespace FitTracker.Persistence
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("spAddWeightTraining", connection); //TODO: add stored procedure
+                SqlCommand cmd = new SqlCommand("spAddWeightTraining", connection);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@TrainingID", trainingDTO.TrainingID);
                 cmd.Parameters.AddWithValue("@UserID", trainingDTO.UserID);
@@ -194,7 +245,7 @@ namespace FitTracker.Persistence
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    SqlCommand cmdRound = new SqlCommand("spAddRound", connection); //TODO: add stored procedure
+                    SqlCommand cmdRound = new SqlCommand("spAddRound", connection);
                     cmdRound.CommandType = System.Data.CommandType.StoredProcedure;
                     cmdRound.Parameters.AddWithValue("@RoundID", round.RoundID);
                     cmdRound.Parameters.AddWithValue("@ExercisID", round.Exercise.ExerciseID);
@@ -206,7 +257,7 @@ namespace FitTracker.Persistence
 
                     foreach (var set in round.Sets)
                     {
-                        SqlCommand cmdSet = new SqlCommand("spAddSet", connection); //TODO: add stored procedure
+                        SqlCommand cmdSet = new SqlCommand("spAddSet", connection);
                         cmdSet.CommandType = System.Data.CommandType.StoredProcedure;
                         cmdSet.Parameters.AddWithValue("@SetID", set.SetID);
                         cmdSet.Parameters.AddWithValue("@RoundID", set.RoundID);
@@ -225,7 +276,7 @@ namespace FitTracker.Persistence
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("spAddCardioTraining", connection); //TODO: add stored procedure
+                SqlCommand cmd = new SqlCommand("spAddCardioTraining", connection);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@TrainingID", trainingDTO.TrainingID);
                 cmd.Parameters.AddWithValue("@ExerciseID", trainingDTO.Exercise.ExerciseID);
@@ -244,7 +295,7 @@ namespace FitTracker.Persistence
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("spGetExercise", connection); //TODO: add stored procedure
+                SqlCommand cmd = new SqlCommand("spGetExercise", connection);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@ExerciseID", exerciseID);
 
@@ -253,12 +304,38 @@ namespace FitTracker.Persistence
                     ExerciseDTO exerciseDTO = new ExerciseDTO();
                     while(reader.Read())
                     {
-                        exerciseDTO.ExerciseType = (ExerciseType)Enum.Parse(typeof(ExerciseType), reader["ExerciseType"].ToString());
+                        exerciseDTO.ExerciseType = (ExerciseTypeDTO)Enum.Parse(typeof(ExerciseTypeDTO), reader["ExerciseType"].ToString());
                         exerciseDTO.Name = reader["Name"].ToString();
                         exerciseDTO.ExerciseID = Guid.Parse(reader["ExerciseID"].ToString());
-
                     }
                     return exerciseDTO;
+                }
+            }
+        }
+
+        public List<RoundDTO> GetRounds(string trainingID)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                List<RoundDTO> rounds = new List<RoundDTO>();
+                SqlCommand cmd = new SqlCommand("spGetRounds", connection);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@TrainingID", trainingID);
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while(reader.Read())
+                    {
+                        RoundDTO round = new RoundDTO();
+                        round.ExerciseID = Guid.Parse(reader["ExerciseID"].ToString());
+                        round.Exercise = GetExerciseDTO(round.ExerciseID.ToString());
+                        round.TrainingID = Guid.Parse(trainingID);
+                        round.RoundID = Guid.Parse(reader["ID"].ToString());
+
+                        rounds.Add(round);
+                    }
+
+                    return rounds;
                 }
             }
         }

@@ -12,7 +12,8 @@ namespace FitTracker.Interface.Interfaces
         public List<TrainingDTO> GetUserTrainings(string userID);
         public WeightTrainingDTO GetWeightTraining(string trainingID);
         public CardioTrainingDTO GetCardioTraining(string trainingID);
-        public void DeleteTraining(string trainingID);
+        public void DeleteWeightTraining(string trainingID);
+        public void DeleteCardioTraining(string trainingID);
         public ExerciseDTO GetExerciseDTO(string exerciseID);
     }
 }
