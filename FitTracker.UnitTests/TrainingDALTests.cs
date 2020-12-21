@@ -10,6 +10,7 @@ namespace FitTracker.UnitTests
     [TestClass]
     class TrainingDALTests
     {
+        /*
         [TestMethod]
         public void AddTraining_Correctly()
         {
@@ -40,6 +41,6 @@ namespace FitTracker.UnitTests
                 }
             };
             user.AddTraining(training);
-        }
+        }*/
     }
 }
