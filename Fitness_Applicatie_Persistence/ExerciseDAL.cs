@@ -48,7 +48,7 @@ namespace FitTracker.Persistence
                 SqlCommand cmd = new SqlCommand("spGetExercise", connection);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@ExerciseID", exerciseID);
-
+                connection.Open();
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     ExerciseDTO exerciseDTO = new ExerciseDTO();
@@ -59,6 +59,32 @@ namespace FitTracker.Persistence
                         exerciseDTO.ExerciseID = Guid.Parse(reader["ExerciseID"].ToString());
                     }
                     return exerciseDTO;
+                }
+            }
+        }
+
+        public List<ExerciseDTO> GetExerciseDTOs()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                List<ExerciseDTO> exerciseDTOs = new List<ExerciseDTO>();
+                SqlCommand cmd = new SqlCommand("spGetAllExercises", connection);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                connection.Open();
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while(reader.Read())
+                    {
+                        ExerciseDTO exerciseDTO = new ExerciseDTO();
+                        exerciseDTO.ExerciseID = Guid.Parse(reader["ExerciseID"].ToString());
+                        exerciseDTO.UserID = reader["UserID"].ToString();
+                        exerciseDTO.ExerciseType = (ExerciseTypeDTO)Convert.ToInt32(reader["ExerciseType"]);
+                        exerciseDTO.Name = reader["Name"].ToString();
+                        exerciseDTOs.Add(exerciseDTO);
+                    }
+
+                    return exerciseDTOs;
                 }
             }
         }
