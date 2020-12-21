@@ -8,7 +8,7 @@ namespace FitTracker.Logic
     {
         public Guid ExerciseID { get; set; }
         public string Name { get; set; }
-        public Guid UserID { get; set; }
+        public string UserID { get; set; }
         public ExerciseType ExerciseType { get; set; }
     }
 }

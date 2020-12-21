@@ -11,7 +11,7 @@ namespace FitTracker.Logic
     {
         //properties
         public string Name { get; private set; }
-        public Guid UserID { get; set; }
+        public string UserID { get; set; }
         public string Password { get; private set; }
         public List<Training> Trainings { get; private set; }
         public List<Exercise> Exercises { get; private set; }
