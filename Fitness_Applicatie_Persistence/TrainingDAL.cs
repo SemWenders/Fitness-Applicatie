@@ -150,7 +150,7 @@ namespace FitTracker.Persistence
                 SqlCommand cmdRound = new SqlCommand("spGetRound", connection);
                 cmdRound.CommandType = System.Data.CommandType.StoredProcedure;
                 cmdRound.Parameters.AddWithValue("@TrainingID", trainingID);
-
+                connection.Open();
                 using (SqlDataReader reader = cmdRound.ExecuteReader())
                 {
                     while(reader.Read())
@@ -197,7 +197,7 @@ namespace FitTracker.Persistence
                 SqlCommand cmdTraining = new SqlCommand("spGetTraining", connection);
                 cmdTraining.CommandType = System.Data.CommandType.StoredProcedure;
                 cmdTraining.Parameters.AddWithValue("@TrainingID", trainingID);
-
+                connection.Open();
                 using (SqlDataReader reader = cmdTraining.ExecuteReader())
                 {
                     while(reader.Read())
@@ -298,7 +298,7 @@ namespace FitTracker.Persistence
                 SqlCommand cmd = new SqlCommand("spGetExercise", connection);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@ExerciseID", exerciseID);
-
+                connection.Open();
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     ExerciseDTO exerciseDTO = new ExerciseDTO();
@@ -321,7 +321,7 @@ namespace FitTracker.Persistence
                 SqlCommand cmd = new SqlCommand("spGetRounds", connection);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@TrainingID", trainingID);
-
+                connection.Open();
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     while(reader.Read())
