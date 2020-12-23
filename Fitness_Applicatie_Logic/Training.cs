@@ -6,7 +6,7 @@ namespace FitTracker.Logic
 {
     public class Training
     {
-        public string trainingID { get; set; }
+        public Guid TrainingID { get; set; }
         public string UserID { get; set; }
         public DateTime Date { get; set; }
     }

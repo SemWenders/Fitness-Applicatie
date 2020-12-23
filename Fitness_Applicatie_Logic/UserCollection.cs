@@ -21,5 +21,10 @@ namespace FitTracker.Logic
         {
 
         }
+
+        public void DeleteExercise(Exercise exercise)
+        {
+
+        }
     }
 }

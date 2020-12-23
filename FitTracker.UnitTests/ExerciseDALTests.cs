@@ -40,7 +40,7 @@ namespace FitTracker.UnitTests
         public void GetExercises()
         {
             Interface.Interfaces.IExerciseDAL dal = Factory.ExerciseFactory.GetExerciseDAL();
-            List<ExerciseDTO> exerciseDTOs = dal.GetExerciseDTOs();
+            List<ExerciseDTO> exerciseDTOs = dal.GetAllExerciseDTOs();
             Console.WriteLine(exerciseDTOs.ToString());
         }
     }

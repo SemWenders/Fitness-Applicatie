@@ -6,7 +6,7 @@ namespace FitTracker.Interface.DTOs
 {
     public class TrainingDTO
     {
-        public string TrainingID { get; set; }
+        public Guid TrainingID { get; set; }
         public string UserID { get; set; }
         public DateTime Date { get; set; }
     }

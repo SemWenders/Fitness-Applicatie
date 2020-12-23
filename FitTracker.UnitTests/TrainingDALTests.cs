@@ -2,45 +2,90 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using FitTracker.Interface.Interfaces;
 using FitTracker.Interface.DTOs;
+using FitTracker.Factory;
 using FitTracker.Logic;
 
 namespace FitTracker.UnitTests
 {
     [TestClass]
-    class TrainingDALTests
+    public class TrainingDALTests
     {
-        /*
         [TestMethod]
-        public void AddTraining_Correctly()
+        public void AddWeightTraining()
         {
-            User user = new User
+            ITrainingDAL trainingDal = TrainingFactory.GetTrainingDAL();
+            IExerciseDAL exerciseDAL = ExerciseFactory.GetExerciseDAL();
+            List<Round> rounds = new List<Round>
             {
-                UserID = Guid.NewGuid()
-            };
-
-            Training training = new Training
-            {
-                trainingID = Guid.NewGuid(),
-                Date = DateTime.Now,
-                UserID = user.UserID,
-                ExercisesNames = new List<Exercise>
+                new Round
                 {
-                    new Exercise("Deadlift", false, user.UserID),
-                    new Exercise("Benchpress", false, user.UserID),
-                    new Exercise("Push Up", true, user.UserID),
-                    new Exercise("Chin Up", true, user.UserID)
+                    RoundID = Guid.NewGuid(),
+                    ExerciseID = trainingDal.GetExerciseID("Deadlift"),
+                    Sets = new List<Set>
+                    {
+                        new Set
+                        {
+                            SetID = Guid.NewGuid(),
+                            SetOrder = 0,
+                            Weight = 80
+                        },
+
+                        new Set
+                        {
+                            SetID = Guid.NewGuid(),
+                            SetOrder = 1,
+                            Weight = 82.5
+                        },
+
+                        new Set
+                        {
+                            SetID = Guid.NewGuid(),
+                            SetOrder = 2,
+                            Weight = 85
+                        }
+                    }
                 },
 
-                Sets = new List<Set>
+                new Round
                 {
-                    new Set {Weights = new List<double> {80, 85, 90}},
-                    new Set {Weights = new List<double> {50, 52.5, 55}},
-                    new Set {Weights = new List<double> {7, 7, 7}},
-                    new Set {Weights = new List<double> {15, 15, 15}}
+                    RoundID = Guid.NewGuid(),
+                    ExerciseID = trainingDal.GetExerciseID("Squat"),
+                    Sets = new List<Set>
+                    {
+                        new Set
+                        {
+                            SetID = Guid.NewGuid(),
+                            SetOrder = 0,
+                            Weight = 55
+                        },
+
+                        new Set
+                        {
+                            SetID = Guid.NewGuid(),
+                            SetOrder = 1,
+                            Weight = 57.5
+                        },
+
+                        new Set
+                        {
+                            SetID = Guid.NewGuid(),
+                            SetOrder = 2,
+                            Weight = 60
+                        }
+                    }
                 }
             };
-            user.AddTraining(training);
-        }*/
+            WeightTraining weightTraining = new WeightTraining()
+            {
+                Date = DateTime.Parse("22-12-2020"),
+                TrainingID = Guid.NewGuid(),
+                UserID = "TestAccount",
+                Rounds = rounds
+            };
+            User user = new User();
+            user.AddWeightTraining(weightTraining);
+        }
     }
 }
