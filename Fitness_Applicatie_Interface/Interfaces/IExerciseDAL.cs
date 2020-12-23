@@ -9,7 +9,7 @@ namespace FitTracker.Interface.Interfaces
     {
         void AddExercise(ExerciseDTO exercise);
         public ExerciseDTO GetExerciseDTO(string exerciseID);
-        public List<ExerciseDTO> GetExerciseDTOs();
+        public List<ExerciseDTO> GetAllExerciseDTOs();
         void DeleteExercise(string exerciseID);
     }
 }

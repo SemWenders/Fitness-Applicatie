@@ -13,12 +13,12 @@ namespace FitTracker.Persistence
     {
         //TODO: connection string in appsettings
         string connectionString = "Data Source=LAPTOP-7SORRU5A; Initial Catalog=FitTracker; Integrated Security=SSPI;";
-        string GetExerciseID(string ExerciseName)
+        public Guid GetExerciseID(string ExerciseName)
         {
-            string exerciseID = null;
+            Guid exerciseID = Guid.Empty;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand cmd = new SqlCommand("spGetExerciseID");
+                SqlCommand cmd = new SqlCommand("spGetExerciseID", connection);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@ExerciseName", ExerciseName);
 
@@ -27,7 +27,7 @@ namespace FitTracker.Persistence
                 {
                     while (reader.Read())
                     {
-                        exerciseID = reader.ToString();
+                        exerciseID = Guid.Parse(reader["ExerciseID"].ToString());
                     }
                     connection.Close();
                 }
@@ -115,8 +115,8 @@ namespace FitTracker.Persistence
                     while (reader.Read())
                     {
                         TrainingDTO training = new TrainingDTO();
-                        training.TrainingID = (string) reader["TrainingID"];
-                        training.UserID = (string) reader["UserID"];
+                        training.TrainingID = Guid.Parse(reader["TrainingID"].ToString());
+                        training.UserID = reader["UserID"].ToString();
                         training.Date = (DateTime)reader["Date"];
                         trainings.Add(training);
                     }
@@ -142,7 +142,7 @@ namespace FitTracker.Persistence
                     {
                         weightTrainingDTO.Date = Convert.ToDateTime(reader["Date"]);
                         weightTrainingDTO.UserID = reader["UserID"].ToString();
-                        weightTrainingDTO.TrainingID = trainingID;
+                        weightTrainingDTO.TrainingID = Guid.Parse(trainingID.ToString());
                     }
                 }
                 connection.Close();
@@ -174,7 +174,6 @@ namespace FitTracker.Persistence
                                 setDTO.SetID = Guid.Parse(setReader["SetID"].ToString());
                                 setDTO.SetOrder = Convert.ToInt32(setReader["SetOrder"]);
                                 setDTO.Weight = Convert.ToInt32(setReader["Weight"]);
-                                setDTO.RoundID = roundDTO.RoundID;
 
                                 roundDTO.Sets.Add(setDTO);
                             }
@@ -203,7 +202,7 @@ namespace FitTracker.Persistence
                     while(reader.Read())
                     {
                         cardioTrainingDTO.Date = Convert.ToDateTime(reader["Date"]);
-                        cardioTrainingDTO.TrainingID = trainingID;
+                        cardioTrainingDTO.TrainingID = Guid.Parse(trainingID.ToString());
                         cardioTrainingDTO.UserID = trainingID;
                     }
                 }
@@ -248,8 +247,8 @@ namespace FitTracker.Persistence
                     SqlCommand cmdRound = new SqlCommand("spAddRound", connection);
                     cmdRound.CommandType = System.Data.CommandType.StoredProcedure;
                     cmdRound.Parameters.AddWithValue("@RoundID", round.RoundID);
-                    cmdRound.Parameters.AddWithValue("@ExercisID", round.Exercise.ExerciseID);
-                    cmdRound.Parameters.AddWithValue("@TrainingID", round.TrainingID);
+                    cmdRound.Parameters.AddWithValue("@ExerciseID", round.ExerciseID);
+                    cmdRound.Parameters.AddWithValue("@TrainingID", trainingDTO.TrainingID);
 
                     connection.Open();
                     cmdRound.ExecuteNonQuery();
@@ -260,7 +259,7 @@ namespace FitTracker.Persistence
                         SqlCommand cmdSet = new SqlCommand("spAddSet", connection);
                         cmdSet.CommandType = System.Data.CommandType.StoredProcedure;
                         cmdSet.Parameters.AddWithValue("@SetID", set.SetID);
-                        cmdSet.Parameters.AddWithValue("@RoundID", set.RoundID);
+                        cmdSet.Parameters.AddWithValue("@RoundID", round.RoundID);
                         cmdSet.Parameters.AddWithValue("@SetOrder", set.SetOrder);
                         cmdSet.Parameters.AddWithValue("@Weight", set.Weight);
 

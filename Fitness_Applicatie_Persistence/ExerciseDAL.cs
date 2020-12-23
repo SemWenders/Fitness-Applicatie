@@ -63,7 +63,7 @@ namespace FitTracker.Persistence
             }
         }
 
-        public List<ExerciseDTO> GetExerciseDTOs()
+        public List<ExerciseDTO> GetAllExerciseDTOs()
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
