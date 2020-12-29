@@ -12,5 +12,9 @@ namespace Fitness_Applicatie.Controllers
         {
             return View();
         }
+        public IActionResult TrainingDetail()
+        {
+            return View();
+        }
     }
 }

@@ -44,7 +44,9 @@
         @foreach (var item in myList)
         {
             <div class="card">
-                <label style="text-align:center; margin-bottom: 0px; padding-bottom:10px; padding-top:10px">@item</label>
+                <a asp-area="" asp-controller="Home" asp-action="TrainingDetail">
+                    <label style="text-align:center; margin-bottom: 0px; padding-bottom:10px; padding-top:10px">@item</label>
+                </a>
             </div>
         }
     </div>

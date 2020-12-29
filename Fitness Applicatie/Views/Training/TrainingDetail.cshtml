@@ -1,0 +1,28 @@
+﻿@model TrainingViewModel
+
+@{
+    if (Model.Rounds != null)
+    {
+        foreach (var round in Model.Rounds)
+        {
+            <p>@round.Exercise.Name</p>
+            for (int i = 1; i <= round.Sets.Count; i++)
+            {
+                <p>Set @i : @round.Sets[i - 1].Weight</p>
+            }
+        }
+    }
+
+    else if (Model.Exercise.Name != null)
+    {
+        <p>@Model.Date.ToLongDateString()</p>
+        <p>@Model.Exercise.Name</p>
+        <p>@Model.Distance</p>
+        <p>@Model.Time</p>
+    }
+
+    else
+    {
+        <p>Something went wrong</p>
+    }
+}
