@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Fitness_Applicatie.Models;
+using FitTracker.Logic;
 
 namespace Fitness_Applicatie.Controllers
 {
@@ -32,6 +33,18 @@ namespace Fitness_Applicatie.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult TrainingDetail(string trainingID)
+        {
+            User user = new User();
+            WeightTraining weightTraining = user.GetWeightTraining(trainingID);
+            TrainingViewModel trainingViewModel = new TrainingViewModel
+            {
+
+            };
+
+            return View("../Training/TrainingDetail", trainingViewModel);
         }
     }
 }

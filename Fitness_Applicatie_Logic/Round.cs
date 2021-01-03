@@ -6,7 +6,7 @@ namespace FitTracker.Logic
 {
     public class Round
     {
-        public Exercise Exercise { get; private set; }
+        public Exercise Exercise { get; set; }
         public List<Set> Sets { get; set; }
         public Guid RoundID { get; set; }
         public Guid TrainingID { get; set; }

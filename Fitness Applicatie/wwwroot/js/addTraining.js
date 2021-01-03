@@ -4,7 +4,7 @@
     var trainingForm = document.getElementById("trainingForm");
     var addSetButton = document.getElementById("addSetButton");
     var nameLbl = document.getElementById("nameLbl");
-    var Name = document.getElementById("Name");
+    var ExerciseName = document.getElementById("Execise.Name");
     var setsLBl = document.getElementById("setsLbl");
     var Sets = document.getElementById("Sets");
 
@@ -13,7 +13,7 @@
     var addSetButtonClone = addSetButton.cloneNode(true);
     addSetButtonClone.id = "addSetButton" + nextExerciseGroup();
     var nameLBlClone = nameLbl.cloneNode(true);
-    var NameClone = Name.cloneNode();
+    var ExerciseNameClone = ExerciseName.cloneNode();
     var setsLblClone = setsLBl.cloneNode(true);
     var SetsClone = Sets.cloneNode();
     var breakline1 = document.createElement("br");
@@ -22,7 +22,7 @@
 
 
     setGroupClone.appendChild(nameLBlClone);
-    setGroupClone.appendChild(NameClone);
+    setGroupClone.appendChild(ExerciseNameClone);
     setGroupClone.appendChild(setsLblClone);
     setGroupClone.appendChild(SetsClone);
     setGroupClone.appendChild(addSetButtonClone);
