@@ -51,14 +51,15 @@ namespace FitTracker.Logic
             return trainings;
         }
 
-        public TrainingDTO GetTraining(string trainingID)
+        public WeightTraining GetWeightTraining(string trainingID)
         {
             ITrainingDAL trainingDAL = TrainingFactory.GetTrainingDAL();
-            TrainingDTO training = trainingDAL.GetWeightTraining(trainingID);
+            WeightTrainingDTO trainingDTO = trainingDAL.GetWeightTraining(trainingID);
+            WeightTraining training = ConvertWeightTrainingDTO(trainingDTO); 
             return training;
         }
 
-        ExerciseDTO ConvertExercise(Exercise exercise)
+        private ExerciseDTO ConvertExercise(Exercise exercise)
         {
             ExerciseDTO exerciseDTO = new ExerciseDTO()
             {
@@ -69,8 +70,59 @@ namespace FitTracker.Logic
             };
             return exerciseDTO;
         }
+        private Exercise ConvertExerciseDTO(ExerciseDTO exerciseDTO)
+        {
+            Exercise exercise = new Exercise()
+            {
+                ExerciseID = exerciseDTO.ExerciseID,
+                ExerciseType = (ExerciseType)exerciseDTO.ExerciseType,
+                Name = exerciseDTO.Name,
+                UserID = exerciseDTO.UserID
+            };
+            return exercise;
+        }
 
-        WeightTrainingDTO ConvertWeightTraining(WeightTraining training)
+        private WeightTraining ConvertWeightTrainingDTO(WeightTrainingDTO trainingDTO)
+        {
+            List<Round> rounds = new List<Round>();
+            foreach (var roundDTO in trainingDTO.Rounds)
+            {
+                rounds.Add(ConvertRoundDTO(roundDTO));
+            }
+            WeightTraining training = new WeightTraining()
+            {
+                Date = trainingDTO.Date,
+                TrainingID = trainingDTO.TrainingID,
+                UserID = trainingDTO.UserID,
+                Rounds = rounds
+            };
+            return training;
+        }
+
+        private Round ConvertRoundDTO(RoundDTO roundDTO)
+        {
+            List<Set> sets = new List<Set>();
+            foreach (var setDTO in roundDTO.Sets)
+            {
+                sets.Add(ConvertSetDTO(setDTO));
+            }
+            IExerciseDAL dal = ExerciseFactory.GetExerciseDAL();
+            Round round = new Round()
+            {
+                ExerciseID = roundDTO.ExerciseID,
+                RoundID = roundDTO.RoundID,
+                TrainingID = roundDTO.TrainingID,
+                Sets = sets,
+                Exercise = ConvertExerciseDTO(dal.GetExerciseDTO(roundDTO.ExerciseID.ToString()))
+            };
+            return round;
+        }
+        private Set ConvertSetDTO(SetDTO setDTO)
+        {
+            throw new NotImplementedException(); //TODO: fill in
+        }
+
+        private WeightTrainingDTO ConvertWeightTraining(WeightTraining training)
         {
             List<RoundDTO> roundDTOs = new List<RoundDTO>();
             foreach (var round in training.Rounds)
@@ -87,7 +139,7 @@ namespace FitTracker.Logic
             return trainingDTO;
         }
 
-        RoundDTO ConvertRound(Round round)
+        private RoundDTO ConvertRound(Round round)
         {
             List<SetDTO> setDTOs = new List<SetDTO>();
             foreach (var set in round.Sets)
@@ -104,7 +156,7 @@ namespace FitTracker.Logic
             return roundDTO;
         }
 
-        SetDTO ConvertSet(Set set)
+        private SetDTO ConvertSet(Set set)
         {
             SetDTO setDTO = new SetDTO()
             {
@@ -115,7 +167,7 @@ namespace FitTracker.Logic
             return setDTO;
         }
 
-        CardioTrainingDTO ConvertCardioTraining(CardioTraining cardioTraining)
+        private CardioTrainingDTO ConvertCardioTraining(CardioTraining cardioTraining)
         {
             CardioTrainingDTO cardioTrainingDTO = new CardioTrainingDTO()
             {
