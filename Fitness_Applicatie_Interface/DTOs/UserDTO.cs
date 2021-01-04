@@ -6,15 +6,29 @@ namespace FitTracker.Interface.DTOs
 {
     public class UserDTO
     {
-        public string Name { get; set; }
-        public string UserID { get; set; }
-        public string Password { get; set; }
-        public List<TrainingDTO> Trainings { get; set; }
-        public List<ExerciseDTO> Exercises { get; set; }
+        public string Name { get; private set; }
+        public Guid UserID { get; private set; }
+        public string Password { get; private set; }
+        private List<TrainingDTO> trainings;
+        private List<ExerciseDTO> exercises;
 
-        public UserDTO()
+        public UserDTO(string name, Guid userID, string password, List<TrainingDTO> trainings, List<ExerciseDTO> exercises)
         {
-            Trainings = new List<TrainingDTO>();
+            Name = name;
+            UserID = userID;
+            Password = password;
+            this.trainings = trainings;
+            this.exercises = exercises;
+        }
+
+        public List<TrainingDTO> GetTrainings()
+        {
+            return trainings;
+        }
+
+        public List<ExerciseDTO> GetExercises()
+        {
+            return exercises;
         }
     }
 }

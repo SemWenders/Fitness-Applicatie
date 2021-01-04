@@ -49,15 +49,19 @@ namespace FitTracker.Persistence
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@ExerciseID", exerciseID);
                 connection.Open();
+                ExerciseTypeDTO exerciseTypeDTO = ExerciseTypeDTO.Bodyweight;
+                string name = null;
+                Guid userID = Guid.Empty;
+
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    ExerciseDTO exerciseDTO = new ExerciseDTO();
                     while (reader.Read())
                     {
-                        exerciseDTO.ExerciseType = (ExerciseTypeDTO)Enum.Parse(typeof(ExerciseTypeDTO), reader["ExerciseType"].ToString());
-                        exerciseDTO.Name = reader["Name"].ToString();
-                        exerciseDTO.ExerciseID = Guid.Parse(reader["ExerciseID"].ToString());
+                        exerciseTypeDTO = (ExerciseTypeDTO)Enum.Parse(typeof(ExerciseTypeDTO), reader["ExerciseType"].ToString());
+                        name = reader["Name"].ToString();
+                        userID = Guid.Parse(reader["UserID"].ToString());
                     }
+                    ExerciseDTO exerciseDTO = new ExerciseDTO(Guid.Parse(exerciseID), name, userID, exerciseTypeDTO);
                     return exerciseDTO;
                 }
             }
@@ -76,11 +80,11 @@ namespace FitTracker.Persistence
                 {
                     while(reader.Read())
                     {
-                        ExerciseDTO exerciseDTO = new ExerciseDTO();
-                        exerciseDTO.ExerciseID = Guid.Parse(reader["ExerciseID"].ToString());
-                        exerciseDTO.UserID = reader["UserID"].ToString();
-                        exerciseDTO.ExerciseType = (ExerciseTypeDTO)Convert.ToInt32(reader["ExerciseType"]);
-                        exerciseDTO.Name = reader["Name"].ToString();
+                        Guid exerciseID = Guid.Parse(reader["ExerciseID"].ToString());
+                        Guid userID = Guid.Parse(reader["UserID"].ToString());
+                        ExerciseTypeDTO exerciseType = (ExerciseTypeDTO)Convert.ToInt32(reader["ExerciseType"]);
+                        string name = reader["Name"].ToString();
+                        ExerciseDTO exerciseDTO = new ExerciseDTO(exerciseID, name, userID, exerciseType);
                         exerciseDTOs.Add(exerciseDTO);
                     }
 

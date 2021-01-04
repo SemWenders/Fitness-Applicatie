@@ -28,8 +28,8 @@ namespace Fitness_Applicatie.Controllers
             UserViewModel userViewModel = new UserViewModel
             {
                 Name = user.Name,
-                Trainings = user.Trainings,
-                UserID = user.UserID
+                Trainings = user.GetTrainings(),
+                UserID = user.UserID.ToString()
             };
             return View(userViewModel);
         }
@@ -47,9 +47,27 @@ namespace Fitness_Applicatie.Controllers
 
         public IActionResult TrainingDetail(string id)
         {
-            User user = new User();
+            User user = new User(null, Guid.Empty, null, null, null);
+            TrainingViewModel trainingViewModel = new TrainingViewModel();
+            Training training = user.GetTraining(id);
 
-
+            if (training.TrainingType == TrainingType.Strength)
+            {
+                WeightTraining weightTraining = user.GetWeightTraining(id);
+                trainingViewModel.Rounds = weightTraining.GetRounds();
+                trainingViewModel.Date = weightTraining.Date;
+                trainingViewModel.TrainingID = weightTraining.TrainingID;
+                trainingViewModel.TrainingType = weightTraining.TrainingType;
+            }
+            else if (training.TrainingType == TrainingType.Cardio)
+            {
+                CardioTraining cardioTraining = user.GetCardioTraining(id);
+                trainingViewModel.Exercise = cardioTraining.Exercise;
+                trainingViewModel.Distance = cardioTraining.Distance;
+                trainingViewModel.Time = cardioTraining.Time;
+                trainingViewModel.TrainingID = cardioTraining.TrainingID;
+                trainingViewModel.TrainingType = cardioTraining.TrainingType;
+            }
             return View("../Training/TrainingDetail", trainingViewModel);
         }
     }

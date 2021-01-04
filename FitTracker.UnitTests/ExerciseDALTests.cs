@@ -13,17 +13,8 @@ namespace FitTracker.UnitTests
         [TestMethod]
         public void AddExercise_Correctly()
         {
-            User user = new User
-            {
-                UserID = "TestAccount"
-            };
-            Exercise exercise = new Exercise
-            {
-                Name = "Squat",
-                ExerciseID = Guid.NewGuid(),
-                ExerciseType = ExerciseType.Weighted,
-                UserID = user.UserID
-            };
+            User user = new User("Admin", Guid.NewGuid(), "TestPassword", null, null);
+            Exercise exercise = new Exercise(Guid.NewGuid(), "Benchpress", user.UserID, ExerciseType.Weighted);
 
             Interface.Interfaces.IExerciseDAL dal = Factory.ExerciseFactory.GetExerciseDAL();
             ExerciseDTO exerciseDTO = new ExerciseDTO()

@@ -21,6 +21,12 @@ namespace Fitness_Applicatie.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel accountViewModel)
         {
@@ -38,18 +44,16 @@ namespace Fitness_Applicatie.Controllers
 
             //check password
             var hasher = new PasswordHasher<User>();
-            /*
             if (hasher.VerifyHashedPassword(user, user.Password, accountViewModel.Password) == PasswordVerificationResult.Failed)
             {
                 ModelState.AddModelError("", "Username of password is incorrect");
                 return View(accountViewModel);
             }
-            */
 
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Name),
-                new Claim("Id", user.UserID)
+                new Claim("Id", user.UserID.ToString())
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -57,6 +61,12 @@ namespace Fitness_Applicatie.Controllers
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal);
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(LoginViewModel loginViewModel)
+        {
+            return LocalRedirect("/Login");
         }
     }
 }

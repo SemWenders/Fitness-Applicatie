@@ -10,5 +10,6 @@ namespace FitTracker.Interface.Interfaces
         public void AddUser(UserDTO userDTO);
         public void DeleteUser(string userID);
         public UserDTO GetUser(string userID);
+        public List<UserDTO> GetAllUsers();
     }
 }

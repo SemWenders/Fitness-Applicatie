@@ -6,6 +6,23 @@ namespace FitTracker.Interface.DTOs
 {
     public class WeightTrainingDTO : TrainingDTO
     {
-        public List<RoundDTO> Rounds { get; set; }
+        private List<RoundDTO> rounds;
+
+        //constructor
+        public WeightTrainingDTO(List<RoundDTO> rounds, Guid trainingID, Guid userID, DateTime date, TrainingTypeDTO trainingType) : base(trainingID, userID, date, trainingType)
+        {
+            this.rounds = rounds;
+        }
+
+        public WeightTrainingDTO()
+        {
+
+        }
+
+        //methods
+        public List<RoundDTO> GetRounds()
+        {
+            return rounds;
+        }
     }
 }

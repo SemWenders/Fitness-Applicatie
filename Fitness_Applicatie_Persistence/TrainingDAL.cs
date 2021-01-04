@@ -114,16 +114,41 @@ namespace FitTracker.Persistence
                 {
                     while (reader.Read())
                     {
-                        TrainingDTO training = new TrainingDTO();
-                        training.TrainingID = Guid.Parse(reader["TrainingID"].ToString());
-                        training.UserID = reader["UserID"].ToString();
-                        training.Date = (DateTime)reader["Date"];
+                        Guid trainingID = Guid.Parse(reader["ID"].ToString());
+                        DateTime date = (DateTime)reader["Date"];
+                        TrainingTypeDTO trainingType = (TrainingTypeDTO)Enum.Parse(typeof(TrainingTypeDTO), reader["TrainingType"].ToString());
+                        TrainingDTO training = new TrainingDTO(trainingID, Guid.Parse(userID), date, trainingType);
                         trainings.Add(training);
                     }
                 }
             }
 
             return trainings;
+        }
+
+        public TrainingDTO GetTraining(string trainingID)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand cmdTraining = new SqlCommand("spGetTraining", connection);
+                cmdTraining.CommandType = System.Data.CommandType.StoredProcedure;
+                cmdTraining.Parameters.AddWithValue("@TrainingID", trainingID);
+
+                connection.Open();
+                TrainingDTO trainingDTO = new TrainingDTO();
+                using (SqlDataReader reader = cmdTraining.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Guid userID = Guid.Parse(reader["UserID"].ToString());
+                        DateTime date = (DateTime)reader["Date"];
+                        TrainingTypeDTO trainingType = (TrainingTypeDTO)Enum.Parse(typeof(TrainingTypeDTO), reader["TrainingType"].ToString());
+                        trainingDTO = new TrainingDTO(Guid.Parse(trainingID), userID, date, trainingType);
+                    }
+                }
+                connection.Close();
+                return trainingDTO;
+            }
         }
 
         public WeightTrainingDTO GetWeightTraining(string trainingID)
@@ -134,15 +159,18 @@ namespace FitTracker.Persistence
                 cmdTraining.CommandType = System.Data.CommandType.StoredProcedure;
                 cmdTraining.Parameters.AddWithValue("@TrainingID", trainingID);
 
-                WeightTrainingDTO weightTrainingDTO = new WeightTrainingDTO();
+                DateTime date = DateTime.MinValue;
+                Guid userID = Guid.Empty;
+                TrainingTypeDTO trainingType = TrainingTypeDTO.Strength;
+
                 connection.Open();
                 using (SqlDataReader reader = cmdTraining.ExecuteReader())
                 {
                     while(reader.Read())
                     {
-                        weightTrainingDTO.Date = Convert.ToDateTime(reader["Date"]);
-                        weightTrainingDTO.UserID = reader["UserID"].ToString();
-                        weightTrainingDTO.TrainingID = Guid.Parse(trainingID.ToString());
+                        date = Convert.ToDateTime(reader["Date"]);
+                        userID = Guid.Parse(reader["UserID"].ToString());
+                        trainingType = (TrainingTypeDTO)Enum.Parse(typeof(TrainingTypeDTO), reader["TrainingType"].ToString());
                     }
                 }
                 connection.Close();
@@ -150,38 +178,39 @@ namespace FitTracker.Persistence
                 SqlCommand cmdRound = new SqlCommand("spGetRound", connection);
                 cmdRound.CommandType = System.Data.CommandType.StoredProcedure;
                 cmdRound.Parameters.AddWithValue("@TrainingID", trainingID);
+                List<RoundDTO> rounds = new List<RoundDTO>();
                 connection.Open();
                 using (SqlDataReader reader = cmdRound.ExecuteReader())
                 {
                     while(reader.Read())
                     {
-                        RoundDTO roundDTO = new RoundDTO();
-
-                        roundDTO.ExerciseID = Guid.Parse(reader["ExerciseID"].ToString());
-                        roundDTO.Exercise = GetExerciseDTO(roundDTO.ExerciseID.ToString());
-                        roundDTO.TrainingID = Guid.Parse(trainingID);
-                        roundDTO.RoundID = Guid.Parse(reader["ID"].ToString());
+                        Guid exerciseID = Guid.Parse(reader["ExerciseID"].ToString());
+                        ExerciseDTO exercise = GetExerciseDTO(exerciseID.ToString());
+                        Guid roundID = Guid.Parse(reader["ID"].ToString());
 
                         SqlCommand cmdSet = new SqlCommand("spGetSet", connection);
                         cmdSet.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmdSet.Parameters.AddWithValue("@RoundID", roundDTO.RoundID);
+                        cmdSet.Parameters.AddWithValue("@RoundID", roundID);
 
+                        List<SetDTO> sets = new List<SetDTO>();
                         using (SqlDataReader setReader = cmdSet.ExecuteReader())
                         {
                             while(reader.Read())
                             {
-                                SetDTO setDTO = new SetDTO();
-                                setDTO.SetID = Guid.Parse(setReader["SetID"].ToString());
-                                setDTO.SetOrder = Convert.ToInt32(setReader["SetOrder"]);
-                                setDTO.Weight = Convert.ToInt32(setReader["Weight"]);
+                                Guid setID = Guid.Parse(setReader["SetID"].ToString());
+                                int setOrder = Convert.ToInt32(setReader["SetOrder"]);
+                                double weight = Convert.ToInt32(setReader["Weight"]);
 
-                                roundDTO.Sets.Add(setDTO);
+                                SetDTO setDTO = new SetDTO(weight, setID, setOrder);
+                                sets.Add(setDTO);
                             }
                         }
 
-                        weightTrainingDTO.Rounds.Add(roundDTO);
+                        RoundDTO roundDTO = new RoundDTO(exercise, roundID, Guid.Parse(trainingID), exerciseID, sets);
+                        rounds.Add(roundDTO);
                     }
 
+                    WeightTrainingDTO weightTrainingDTO = new WeightTrainingDTO(rounds, Guid.Parse(trainingID), userID, date, trainingType);
                     return weightTrainingDTO;
                 }    
             }
@@ -191,19 +220,26 @@ namespace FitTracker.Persistence
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                CardioTrainingDTO cardioTrainingDTO = new CardioTrainingDTO();
                 
                 SqlCommand cmdTraining = new SqlCommand("spGetTraining", connection);
                 cmdTraining.CommandType = System.Data.CommandType.StoredProcedure;
                 cmdTraining.Parameters.AddWithValue("@TrainingID", trainingID);
+
+                DateTime date = DateTime.MinValue;
+                Guid userID = Guid.Empty;
+                ExerciseDTO exercise = new ExerciseDTO();
+                decimal distance = 0;
+                TimeSpan time = TimeSpan.MinValue;
+                TrainingTypeDTO trainingType = TrainingTypeDTO.Cardio;
+
                 connection.Open();
                 using (SqlDataReader reader = cmdTraining.ExecuteReader())
                 {
                     while(reader.Read())
                     {
-                        cardioTrainingDTO.Date = Convert.ToDateTime(reader["Date"]);
-                        cardioTrainingDTO.TrainingID = Guid.Parse(trainingID.ToString());
-                        cardioTrainingDTO.UserID = trainingID;
+                        date = Convert.ToDateTime(reader["Date"]);
+                        userID = Guid.Parse(trainingID);
+                        trainingType = (TrainingTypeDTO)Enum.Parse(typeof(TrainingTypeDTO), reader["TrainingType"].ToString());
                     }
                 }
 
@@ -215,12 +251,13 @@ namespace FitTracker.Persistence
                 {
                     while(reader.Read())
                     {
-                        cardioTrainingDTO.Exercise = GetExerciseDTO(reader["ExerciseID"].ToString());
-                        cardioTrainingDTO.Distance = Convert.ToDecimal(reader["Distance"]);
-                        cardioTrainingDTO.Time = TimeSpan.Parse(reader["Time"].ToString());
+                        exercise = GetExerciseDTO(reader["ExerciseID"].ToString());
+                        distance = Convert.ToDecimal(reader["Distance"]);
+                        time = TimeSpan.Parse(reader["Time"].ToString());
                     }
                 }
 
+                CardioTrainingDTO cardioTrainingDTO = new CardioTrainingDTO(exercise, distance, time, Guid.Parse(trainingID), userID, date, trainingType);
                 return cardioTrainingDTO;
             }
         }
@@ -240,7 +277,7 @@ namespace FitTracker.Persistence
                 connection.Close();
             }
 
-            foreach (var round in trainingDTO.Rounds)
+            foreach (var round in trainingDTO.GetRounds())
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
@@ -254,7 +291,7 @@ namespace FitTracker.Persistence
                     cmdRound.ExecuteNonQuery();
                     connection.Close();
 
-                    foreach (var set in round.Sets)
+                    foreach (var set in round.GetSets())
                     {
                         SqlCommand cmdSet = new SqlCommand("spAddSet", connection);
                         cmdSet.CommandType = System.Data.CommandType.StoredProcedure;
@@ -298,15 +335,18 @@ namespace FitTracker.Persistence
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@ExerciseID", exerciseID);
                 connection.Open();
+                ExerciseTypeDTO exerciseType = ExerciseTypeDTO.Bodyweight;
+                string name = null;
+                Guid userID = Guid.Empty;
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    ExerciseDTO exerciseDTO = new ExerciseDTO();
                     while(reader.Read())
                     {
-                        exerciseDTO.ExerciseType = (ExerciseTypeDTO)Enum.Parse(typeof(ExerciseTypeDTO), reader["ExerciseType"].ToString());
-                        exerciseDTO.Name = reader["Name"].ToString();
-                        exerciseDTO.ExerciseID = Guid.Parse(reader["ExerciseID"].ToString());
+                        exerciseType = (ExerciseTypeDTO)Enum.Parse(typeof(ExerciseTypeDTO), reader["ExerciseType"].ToString());
+                        name = reader["Name"].ToString();
+                        userID = Guid.Parse(reader["UserID"].ToString());
                     }
+                    ExerciseDTO exerciseDTO = new ExerciseDTO(Guid.Parse(exerciseID), name, userID, exerciseType);
                     return exerciseDTO;
                 }
             }
@@ -321,16 +361,18 @@ namespace FitTracker.Persistence
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@TrainingID", trainingID);
                 connection.Open();
+                Guid exerciseID = Guid.Empty;
+                ExerciseDTO exercise = new ExerciseDTO();
+                Guid roundID = Guid.Empty;
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
                     while(reader.Read())
                     {
-                        RoundDTO round = new RoundDTO();
-                        round.ExerciseID = Guid.Parse(reader["ExerciseID"].ToString());
-                        round.Exercise = GetExerciseDTO(round.ExerciseID.ToString());
-                        round.TrainingID = Guid.Parse(trainingID);
-                        round.RoundID = Guid.Parse(reader["ID"].ToString());
+                        exerciseID = Guid.Parse(reader["ExerciseID"].ToString());
+                        exercise = GetExerciseDTO(exerciseID.ToString());
+                        roundID = Guid.Parse(reader["ID"].ToString());
 
+                        RoundDTO round = new RoundDTO(exercise, roundID, Guid.Parse(trainingID), exerciseID, null);
                         rounds.Add(round);
                     }
 

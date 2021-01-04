@@ -14,5 +14,6 @@ namespace Fitness_Applicatie.Models
         public DateTime Date { get; set; }
         public decimal Distance { get; set; }
         public TimeSpan Time { get; set; }
+        public TrainingType TrainingType { get; set; }
     }
 }

@@ -6,6 +6,16 @@ namespace FitTracker.Logic
 {
     public class WeightTraining : Training
     {
-        public List<Round> Rounds { get; set; }
+        private List<Round> rounds;
+
+        public List<Round> GetRounds()
+        {
+            return rounds;
+        }
+
+        public WeightTraining(List<Round> rounds, Guid trainingID, Guid userID, DateTime date, TrainingType trainingType) : base(trainingID, userID, date, trainingType)
+        {
+            this.rounds = rounds;
+        }
     }
 }

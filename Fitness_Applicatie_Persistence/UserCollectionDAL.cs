@@ -20,6 +20,29 @@ namespace FitTracker.Persistence
             throw new NotImplementedException();
         }
 
+        public List<UserDTO> GetAllUsers()
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand("spGetAllUsers", connection); //TODO: write stored procedure
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                List<UserDTO> userDTOs = new List<UserDTO>();
+                connection.Open();
+                using(SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        string name = reader["Name"].ToString();
+                        Guid userID = Guid.Parse(reader["UserID"].ToString());
+                        string password = reader["Password"].ToString();
+                        UserDTO userDTO = new UserDTO(name, userID, password, null, null);
+                        userDTOs.Add(userDTO);
+                    }
+                    return userDTOs;
+                }
+            }
+        }
+
         public UserDTO GetUser(string userID)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -27,18 +50,19 @@ namespace FitTracker.Persistence
                 SqlCommand cmdUser = new SqlCommand("spGetUser", connection);
                 cmdUser.CommandType = System.Data.CommandType.StoredProcedure;
                 cmdUser.Parameters.AddWithValue("@UserID", userID);
-                UserDTO userDTO = new UserDTO();
+                string name = null;
+                string password = null;
                 connection.Open();
                 using (SqlDataReader reader = cmdUser.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        userDTO.Name = reader["Name"].ToString();
-                        userDTO.UserID = userID;
-                        userDTO.Password = reader["Password"].ToString();
+                        name = reader["Name"].ToString();
+                        password = reader["Password"].ToString();
                     }
                 }
 
+                List<TrainingDTO> trainingDTOs = new List<TrainingDTO>();
                 SqlCommand cmdTrainings = new SqlCommand("spGetUserTrainings", connection);
                 cmdTrainings.CommandType = System.Data.CommandType.StoredProcedure;
                 cmdTrainings.Parameters.AddWithValue("@UserID", userID);
@@ -47,13 +71,14 @@ namespace FitTracker.Persistence
                 {
                     while (reader.Read())
                     {
-                        TrainingDTO training = new TrainingDTO();
-                        training.TrainingID = Guid.Parse(reader["ID"].ToString());
-                        training.UserID = reader["UserID"].ToString();
-                        training.Date = (DateTime)reader["Date"];
-                        userDTO.Trainings.Add(training);
+                        Guid trainingID = Guid.Parse(reader["ID"].ToString());
+                        DateTime date = (DateTime)reader["Date"];
+                        TrainingTypeDTO trainingType = (TrainingTypeDTO)Enum.Parse(typeof(TrainingTypeDTO), reader["TrainingType"].ToString());
+                        TrainingDTO training = new TrainingDTO(trainingID, Guid.Parse(userID), date, trainingType);
+                        trainingDTOs.Add(training);
                     }
                 }
+                UserDTO userDTO = new UserDTO(name, Guid.Parse(userID), password, trainingDTOs, null);
                 return userDTO;
             }
         }

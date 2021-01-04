@@ -6,10 +6,24 @@ namespace FitTracker.Interface.DTOs
 {
     public class RoundDTO
     {
-        public ExerciseDTO Exercise { get; set; }
-        public List<SetDTO> Sets { get; set; }
-        public Guid RoundID { get; set; }
-        public Guid TrainingID { get; set; }
-        public Guid ExerciseID { get; set; }
+        public ExerciseDTO Exercise { get; private set; }
+        public Guid RoundID { get; private set; }
+        public Guid TrainingID { get; private set; }
+        public Guid ExerciseID { get; private set; }
+        private List<SetDTO> sets;
+
+        public List<SetDTO> GetSets()
+        {
+            return sets;
+        }
+
+        public RoundDTO(ExerciseDTO exercise, Guid roundID, Guid trainingID, Guid exerciseID, List<SetDTO> sets)
+        {
+            Exercise = exercise;
+            RoundID = roundID;
+            TrainingID = trainingID;
+            ExerciseID = exerciseID;
+            this.sets = sets;
+        }
     }
 }

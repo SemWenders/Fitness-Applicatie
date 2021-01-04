@@ -48,15 +48,17 @@ namespace FitTracker.Persistence
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@UserID", userID);
                 connection.Open();
+                string name = null;
+                string password = null;
+
                 using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    UserDTO userDTO = new UserDTO();
                     while(reader.Read())
                     {
-                        userDTO.Name = reader["Name"].ToString();
-                        userDTO.UserID = userID;
-                        userDTO.Password = reader["Password"].ToString();
+                        name = reader["Name"].ToString();
+                        password = reader["Password"].ToString();
                     }
+                    UserDTO userDTO = new UserDTO(name, Guid.Parse(userID), password, null, null);
                     return userDTO;
                 }
             }
