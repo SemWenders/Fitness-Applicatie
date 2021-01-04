@@ -1,33 +1,16 @@
-﻿@{
+﻿@model UserViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-@{ 
-    List<string> myList = new List<string>();
-    myList.Add("One");
-    myList.Add("Two");
-    myList.Add("Three");
-    myList.Add("Four");
-    myList.Add("One");
-    myList.Add("Two");
-    myList.Add("Three");
-    myList.Add("Four");
-    myList.Add("One");
-    myList.Add("Two");
-    myList.Add("Three");
-    myList.Add("Four");
-    myList.Add("One");
-    myList.Add("Two");
-    myList.Add("Three");
-    myList.Add("Four");
-}
 <div class="row">
     <div class="col-3">
 
     </div>
 
     <div class="col-6">
-        <h1>My exercises</h1>
+        <h1>My training</h1>
     </div>
 
     <div class="col-3">
@@ -41,11 +24,11 @@
     </div>
 
     <div class="col-6">
-        @foreach (var item in myList)
+        @foreach (var training in Model.Trainings)
         {
             <div class="card">
-                <a asp-area="" asp-controller="Home" asp-action="TrainingDetail">
-                    <label style="text-align:center; margin-bottom: 0px; padding-bottom:10px; padding-top:10px">@item</label>
+                <a asp-area="" asp-controller="Home" asp-action="TrainingDetail" asp-route-id="@training.TrainingID">
+                    <label style="text-align:center; margin-bottom: 0px; padding-bottom:10px; padding-top:10px">@training.Date.ToShortDateString()</label>
                 </a>
             </div>
         }

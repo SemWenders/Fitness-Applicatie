@@ -1,0 +1,19 @@
+﻿@model LoginViewModel
+
+@using (Html.BeginForm("Login", "Account", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "setContent()" }))
+{
+    <div class="row">
+        <div class="col-12" style="text-align:center">
+            Username:
+            @Html.TextBoxFor(m => m.UserName)
+            <br />
+            <br />
+            Password:
+            @Html.TextBoxFor(m => m.Password)
+            <br />
+            <br />
+            <input type="submit" value="Log in" />
+        </div>
+    </div>
+}
+

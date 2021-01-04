@@ -11,5 +11,10 @@ namespace FitTracker.Interface.DTOs
         public string Password { get; set; }
         public List<TrainingDTO> Trainings { get; set; }
         public List<ExerciseDTO> Exercises { get; set; }
+
+        public UserDTO()
+        {
+            Trainings = new List<TrainingDTO>();
+        }
     }
 }

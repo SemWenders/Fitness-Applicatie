@@ -10,11 +10,11 @@ namespace FitTracker.Logic
     public class User
     {
         //properties
-        public string Name { get; private set; }
+        public string Name { get; set; }
         public string UserID { get; set; }
-        public string Password { get; private set; }
-        public List<Training> Trainings { get; private set; }
-        public List<Exercise> Exercises { get; private set; }
+        public string Password { get; set; }
+        public List<Training> Trainings { get; set; }
+        public List<Exercise> Exercises { get; set; }
 
         //methods
         public void AddExercise(Exercise exercise)

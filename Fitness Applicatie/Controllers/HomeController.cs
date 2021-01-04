@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Fitness_Applicatie.Models;
 using FitTracker.Logic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Fitness_Applicatie.Controllers
 {
@@ -19,9 +20,18 @@ namespace Fitness_Applicatie.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
-            return View();
+            UserCollection userCollection = new UserCollection();
+            User user = userCollection.GetUser(User.FindFirst("Id").Value);
+            UserViewModel userViewModel = new UserViewModel
+            {
+                Name = user.Name,
+                Trainings = user.Trainings,
+                UserID = user.UserID
+            };
+            return View(userViewModel);
         }
 
         public IActionResult Privacy()
@@ -35,14 +45,10 @@ namespace Fitness_Applicatie.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult TrainingDetail(string trainingID)
+        public IActionResult TrainingDetail(string id)
         {
             User user = new User();
-            WeightTraining weightTraining = user.GetWeightTraining(trainingID);
-            TrainingViewModel trainingViewModel = new TrainingViewModel
-            {
 
-            };
 
             return View("../Training/TrainingDetail", trainingViewModel);
         }
