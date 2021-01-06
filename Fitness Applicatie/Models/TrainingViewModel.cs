@@ -10,7 +10,7 @@ namespace Fitness_Applicatie.Models
     {
         public Guid TrainingID { get; set; }
         public Exercise Exercise { get; set; }
-        public List<Round> Rounds { get; set; }
+        public List<RoundViewModel> Rounds { get; set; }
         public DateTime Date { get; set; }
         public decimal Distance { get; set; }
         public TimeSpan Time { get; set; }

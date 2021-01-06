@@ -6,9 +6,9 @@
         foreach (var round in Model.Rounds)
         {
             <p>@round.Exercise.Name</p>
-            for (int i = 1; i <= round.GetSets().Count; i++)
+            for (int i = 1; i <= round.Sets.Count; i++)
             {
-                <p>Set @i : @round.GetSets()[i - 1].Weight</p>
+                <p>Set @i : @round.Sets[i - 1].Weight</p>
             }
         }
     }

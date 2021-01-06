@@ -1,6 +1,6 @@
 ﻿@model Fitness_Applicatie.Models.TrainingViewModel
- 
-@{ 
+
+@{
     ViewData["Title"] = "Add Training";
 }
 
@@ -12,23 +12,27 @@
     </div>
 
     <div class="col-6">
-        <form id="trainingForm">
+        @using (Html.BeginForm("AddStrengthTraining", "Training", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "setContent()", id = "trainingForm" }))
+        {
             <div id="exerciseGroup" style="text-align:right">
                 <div class="form-group row" id="setGroup" style="display:inline">
-                    <label asp-for="Exercise.Name" id="nameLbl"></label>
-                    <input asp-for="Exercise.Name" />
-                    <label asp-for="Rounds" id="setsLbl">Weights</label>
-                    <input asp-for="Rounds" style="width: 10%; margin-bottom:16px"/>
-                    <button id="addSetButton" onclick="addSetField(this.id)" type="button">Add set</button>
+                    <label asp-for="Rounds[0].Exercise.Name" id="nameLbl"></label>
+                    <input asp-for="Rounds[0].Exercise.Name" />
+                    <label asp-for="Rounds[0].Sets[0].Weight" id="setsLbl">Weights</label>
+                    <input asp-for="Rounds[0].Sets[0].Weight" style="width: 10%; margin-bottom:16px" />
+                    <button id="addSetButton@0_0" onclick="addSetField(this.id);return false" type="button">Add set</button>
                     <br />
                 </div>
             </div>
             <br />
             <br />
-        </form>
+            <input type="submit" value="Add Training" id="addTrainingSubmit" />
+        }
     </div>
 
     <div class="col-3">
-        
+
     </div>
 </div>
+
+<button hidden id="addSetButtonFormat" onclick="addSetField(this.id);return false" type="button">Add set</button>

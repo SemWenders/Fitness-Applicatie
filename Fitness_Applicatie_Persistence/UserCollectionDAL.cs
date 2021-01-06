@@ -12,7 +12,18 @@ namespace FitTracker.Persistence
         string connectionString = "Data Source=LAPTOP-7SORRU5A; Initial Catalog=FitTracker; Integrated Security=SSPI;";
         public void AddUser(UserDTO userDTO)
         {
-            throw new NotImplementedException();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand("spAddUser", connection);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@UserID", userDTO.UserID);
+                cmd.Parameters.AddWithValue("@Password", userDTO.Password);
+                cmd.Parameters.AddWithValue("@Name", userDTO.Name);
+
+                connection.Open();
+                cmd.ExecuteNonQuery();
+                connection.Close();
+            }
         }
 
         public void DeleteUser(string userID)
@@ -43,21 +54,21 @@ namespace FitTracker.Persistence
             }
         }
 
-        public UserDTO GetUser(string userID)
+        public UserDTO GetUser(string username)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                SqlCommand cmdUser = new SqlCommand("spGetUser", connection);
+                SqlCommand cmdUser = new SqlCommand("spGetUserByName", connection);
                 cmdUser.CommandType = System.Data.CommandType.StoredProcedure;
-                cmdUser.Parameters.AddWithValue("@UserID", userID);
-                string name = null;
+                cmdUser.Parameters.AddWithValue("@Name", username);
+                Guid userID = Guid.Empty;
                 string password = null;
                 connection.Open();
                 using (SqlDataReader reader = cmdUser.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        name = reader["Name"].ToString();
+                        userID = Guid.Parse(reader["UserID"].ToString());
                         password = reader["Password"].ToString();
                     }
                 }
@@ -65,7 +76,7 @@ namespace FitTracker.Persistence
                 List<TrainingDTO> trainingDTOs = new List<TrainingDTO>();
                 SqlCommand cmdTrainings = new SqlCommand("spGetUserTrainings", connection);
                 cmdTrainings.CommandType = System.Data.CommandType.StoredProcedure;
-                cmdTrainings.Parameters.AddWithValue("@UserID", userID);
+                cmdTrainings.Parameters.AddWithValue("@UserID", username);
 
                 using (SqlDataReader reader = cmdTrainings.ExecuteReader())
                 {
@@ -74,11 +85,11 @@ namespace FitTracker.Persistence
                         Guid trainingID = Guid.Parse(reader["ID"].ToString());
                         DateTime date = (DateTime)reader["Date"];
                         TrainingTypeDTO trainingType = (TrainingTypeDTO)Enum.Parse(typeof(TrainingTypeDTO), reader["TrainingType"].ToString());
-                        TrainingDTO training = new TrainingDTO(trainingID, Guid.Parse(userID), date, trainingType);
+                        TrainingDTO training = new TrainingDTO(trainingID, Guid.Parse(username), date, trainingType);
                         trainingDTOs.Add(training);
                     }
                 }
-                UserDTO userDTO = new UserDTO(name, Guid.Parse(userID), password, trainingDTOs, null);
+                UserDTO userDTO = new UserDTO(username, userID, password, trainingDTOs, null);
                 return userDTO;
             }
         }

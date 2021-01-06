@@ -36,6 +36,11 @@ namespace FitTracker.Logic
             this.exercises = exercises;
         }
 
+        public User()
+        {
+
+        }
+
         //methods
         public void AddExercise(Exercise exercise)
         {

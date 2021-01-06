@@ -17,10 +17,10 @@
             </div>
             <br />
             <div class="form-group text-center">
-                <label asp-for="BodyWeight">Are you training on bodyweight?</label>
+                <label asp-for="ExerciseType">Are you training on bodyweight?</label>
                 <br />
-                <input type="radio" name="bodyweight" asp-for="BodyWeight" value="True"/>Yes
-                <input type="radio" name="bodyweight" asp-for="BodyWeight" value="False"/>No
+                <input type="radio" name="bodyweight" asp-for="ExerciseType" value="ExerciseType.Bodyweight"/>Yes
+                <input type="radio" name="bodyweight" asp-for="ExerciseType" value="Weighted"/>No
             </div>
             <div class="form-group text-center">
                 <input type="submit" value="Add" class="btn-danger" />

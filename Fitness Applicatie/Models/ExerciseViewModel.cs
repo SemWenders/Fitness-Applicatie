@@ -9,10 +9,9 @@ namespace Fitness_Applicatie.Models
 {
     public class ExerciseViewModel
     {
-        [BindProperty]
+        public Guid ExerciseID { get; set; }
         public string Name { get; set; }
-
-        [BindProperty]
-        public bool BodyWeight { get; set; }
+        public Guid UserID { get; set; }
+        public ExerciseType ExerciseType { get; set; }
     }
 }

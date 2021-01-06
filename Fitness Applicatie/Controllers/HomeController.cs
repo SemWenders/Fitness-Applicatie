@@ -54,7 +54,12 @@ namespace Fitness_Applicatie.Controllers
             if (training.TrainingType == TrainingType.Strength)
             {
                 WeightTraining weightTraining = user.GetWeightTraining(id);
-                trainingViewModel.Rounds = weightTraining.GetRounds();
+                List<RoundViewModel> roundViewModels = new List<RoundViewModel>();
+                foreach (var round in weightTraining.GetRounds())
+                {
+                    roundViewModels.Add(ConvertRoundVM(round));
+                }
+                trainingViewModel.Rounds = roundViewModels;
                 trainingViewModel.Date = weightTraining.Date;
                 trainingViewModel.TrainingID = weightTraining.TrainingID;
                 trainingViewModel.TrainingType = weightTraining.TrainingType;
@@ -69,6 +74,45 @@ namespace Fitness_Applicatie.Controllers
                 trainingViewModel.TrainingType = cardioTraining.TrainingType;
             }
             return View("../Training/TrainingDetail", trainingViewModel);
+        }
+
+        private TrainingViewModel ConvertWeightTrainingVM(WeightTraining weightTraining)
+        {
+            List<RoundViewModel> roundViewModels = new List<RoundViewModel>();
+            foreach (var round in weightTraining.GetRounds())
+            {
+                roundViewModels.Add(ConvertRoundVM(round));
+            }
+            TrainingViewModel trainingViewModel = new TrainingViewModel
+            {
+                Date = weightTraining.Date,
+                Rounds = roundViewModels,
+                TrainingID = weightTraining.TrainingID,
+                TrainingType = weightTraining.TrainingType
+            };
+            return trainingViewModel;
+        }
+
+        private RoundViewModel ConvertRoundVM(Round round)
+        {
+            List<SetViewModel> setViewModels = new List<SetViewModel>();
+            foreach (var set in round.GetSets())
+            {
+                setViewModels.Add(ConvertSetVM(set));
+            }
+            RoundViewModel roundViewModel = new RoundViewModel();
+            return roundViewModel;
+        }
+
+        SetViewModel ConvertSetVM(Set set)
+        {
+            SetViewModel setViewModel = new SetViewModel
+            {
+                Weight = set.Weight,
+                SetID = set.SetID,
+                SetOrder = set.SetOrder
+            };
+            return setViewModel;
         }
     }
 }

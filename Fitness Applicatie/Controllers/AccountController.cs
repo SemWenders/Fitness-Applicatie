@@ -28,6 +28,8 @@ namespace Fitness_Applicatie.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel accountViewModel)
         {
             if (!ModelState.IsValid) return View(accountViewModel);
@@ -60,13 +62,22 @@ namespace Fitness_Applicatie.Controllers
             var userPrincipal = new ClaimsPrincipal(new[] { claimsIdentity });
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal);
-            return RedirectToAction("Index", "Home");
+            return LocalRedirect("/Home/Index");
         }
 
         [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(LoginViewModel loginViewModel)
         {
-            return LocalRedirect("/Login");
+            var hasher = new PasswordHasher<User>();
+            User tempUser = new User();
+            string hashedPW = hasher.HashPassword(tempUser, loginViewModel.Password);
+            UserCollection userCollection = new UserCollection();
+            User user = new User(loginViewModel.UserName, Guid.NewGuid(), hashedPW, null, null);
+            userCollection.AddUser(user);
+
+            return LocalRedirect("/Account/Login");
         }
     }
 }
