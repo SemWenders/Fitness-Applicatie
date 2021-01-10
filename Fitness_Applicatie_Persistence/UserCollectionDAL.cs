@@ -1,20 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Text;
 using FitTracker.Interface.DTOs;
 using FitTracker.Interface.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace FitTracker.Persistence
 {
     public class UserCollectionDAL : IUserCollectionDAL
     {
-        string connectionString = "Data Source=LAPTOP-7SORRU5A; Initial Catalog=FitTracker; Integrated Security=SSPI;";
+        //string connectionString = "Data Source=LAPTOP-7SORRU5A; Initial Catalog=FitTracker; Integrated Security=SSPI;";
+        private string GetConnectionString()
+        {
+            var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            return builder.Build().GetConnectionString("DefaultConnection");
+        }
         public void AddUser(UserDTO userDTO)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(GetConnectionString()))
             {
-                SqlCommand cmd = new SqlCommand("spAddUser", connection);
+                SqlCommand cmd = new SqlCommand("INSERT INTO Users VALUES(@UserID, @Password, @Name)", connection);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@UserID", userDTO.UserID);
                 cmd.Parameters.AddWithValue("@Password", userDTO.Password);
@@ -33,9 +40,9 @@ namespace FitTracker.Persistence
 
         public List<UserDTO> GetAllUsers()
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(GetConnectionString()))
             {
-                SqlCommand cmd = new SqlCommand("spGetAllUsers", connection); //TODO: write stored procedure
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Users", connection);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 List<UserDTO> userDTOs = new List<UserDTO>();
                 connection.Open();
@@ -56,9 +63,9 @@ namespace FitTracker.Persistence
 
         public UserDTO GetUser(string username)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(GetConnectionString()))
             {
-                SqlCommand cmdUser = new SqlCommand("spGetUserByName", connection);
+                SqlCommand cmdUser = new SqlCommand("SELECT * FROM Users WHERE Name = @Name", connection);
                 cmdUser.CommandType = System.Data.CommandType.StoredProcedure;
                 cmdUser.Parameters.AddWithValue("@Name", username);
                 Guid userID = Guid.Empty;
@@ -74,7 +81,7 @@ namespace FitTracker.Persistence
                 }
 
                 List<TrainingDTO> trainingDTOs = new List<TrainingDTO>();
-                SqlCommand cmdTrainings = new SqlCommand("spGetUserTrainings", connection);
+                SqlCommand cmdTrainings = new SqlCommand("SELECT * FROM Trainings WHERE UserID = @UserID", connection);
                 cmdTrainings.CommandType = System.Data.CommandType.StoredProcedure;
                 cmdTrainings.Parameters.AddWithValue("@UserID", username);
 

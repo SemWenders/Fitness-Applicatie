@@ -6,11 +6,13 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.8" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Fitness_Applicatie_Interface\FitTracker.Interface.csproj" />
+    <ProjectReference Include="..\Fitness_Applicatie_Interface\FitTracker.DALInterface.csproj" />
   </ItemGroup>
 
 </Project>
