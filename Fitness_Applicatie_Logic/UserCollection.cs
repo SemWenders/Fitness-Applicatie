@@ -4,10 +4,11 @@ using System.Text;
 using FitTracker.Interface.Interfaces;
 using FitTracker.Factory;
 using FitTracker.Interface.DTOs;
+using FitTracker.LogicInterface;
 
 namespace FitTracker.Logic
 {
-    public class UserCollection
+    public class UserCollection : IUserCollection
     {
         private List<User> users;
 
@@ -17,46 +18,45 @@ namespace FitTracker.Logic
         }
 
 
-        public void AddUser(User user)
+        public void AddUser(UserDTO user)
         {
-            IUserCollectionDAL dal = UserCollectionFactory.GetUserCollectionDAL();
-            UserDTO userDTO = ConvertUser(user);
-            dal.AddUser(userDTO);
+            IUserCollectionDAL dal = UserCollectionDALFactory.GetUserCollectionDAL();
+            dal.AddUser(user);
         }
 
 
-        void DeleteUser()
+        public void DeleteUser()
         {
 
         }
 
-        public List<User> Users()
+        public List<UserDTO> Users()
         {
-            return users;
+            return new List<UserDTO>();
         }
 
-        public User GetUser(string username)
+        public UserDTO GetUser(string username)
         {
-            IUserCollectionDAL dal = UserCollectionFactory.GetUserCollectionDAL();
-            UserDTO userDTO = dal.GetUser(username);
-            User user = ConvertUserDTO(userDTO);
+            IUserCollectionDAL dal = UserCollectionDALFactory.GetUserCollectionDAL();
+            UserDTO user = dal.GetUser(username);
             return user;
         }
 
-        private List<User> GetAllUsers()
+        public ExerciseDTO GetExercise(string exerciseName)
         {
-            List<User> users = new List<User>();
-            IUserCollectionDAL dal = UserCollectionFactory.GetUserCollectionDAL();
-            List<UserDTO> userDTOs = dal.GetAllUsers();
-            foreach (var userdto in userDTOs)
-            {
-                User user = ConvertUserDTO(userdto);
-                users.Add(user);
-            }
+            IExerciseDAL exerciseDAL = ExerciseDALFactory.GetExerciseDAL();
+            ExerciseDTO exercise = exerciseDAL.GetExerciseDTOByName(exerciseName);
+            return exercise;
+        }
+
+        public List<UserDTO> GetAllUsers()
+        {
+            IUserCollectionDAL dal = UserCollectionDALFactory.GetUserCollectionDAL();
+            List<UserDTO> users = dal.GetAllUsers();
             return users;
         }
 
-        public void DeleteExercise(Exercise exercise)
+        public void DeleteExercise(ExerciseDTO exercise)
         {
 
         }
@@ -71,6 +71,12 @@ namespace FitTracker.Logic
             User user = new User(userDTO.Name, userDTO.UserID, userDTO.Password, ConvertTrainingDTOs(userDTO.GetTrainings()), ConvertExerciseDTOs(userDTO.GetExercises()));
 
             return user;
+        }
+
+        private Exercise ConvertExerciseDTO(ExerciseDTO exerciseDTO)
+        {
+            Exercise exercise = new Exercise(exerciseDTO.ExerciseID, exerciseDTO.Name, exerciseDTO.UserID, (ExerciseType)exerciseDTO.ExerciseType);
+            return exercise;
         }
         private List<ExerciseDTO> ConvertExercise(List<Exercise> exercises)
         {

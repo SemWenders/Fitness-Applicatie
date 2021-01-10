@@ -16,7 +16,7 @@ namespace FitTracker.UnitTests
             User user = new User("Admin", Guid.NewGuid(), "TestPassword", null, null);
             Exercise exercise = new Exercise(Guid.NewGuid(), "Benchpress", user.UserID, ExerciseType.Weighted);
 
-            Interface.Interfaces.IExerciseDAL dal = Factory.ExerciseFactory.GetExerciseDAL();
+            Interface.Interfaces.IExerciseDAL dal = Factory.ExerciseDALFactory.GetExerciseDAL();
             ExerciseDTO exerciseDTO = new ExerciseDTO(exercise.ExerciseID, exercise.Name, exercise.UserID, (ExerciseTypeDTO)exercise.ExerciseType);
             dal.AddExercise(exerciseDTO);
         }
@@ -24,7 +24,7 @@ namespace FitTracker.UnitTests
         [TestMethod]
         public void GetExercises()
         {
-            Interface.Interfaces.IExerciseDAL dal = Factory.ExerciseFactory.GetExerciseDAL();
+            Interface.Interfaces.IExerciseDAL dal = Factory.ExerciseDALFactory.GetExerciseDAL();
             List<ExerciseDTO> exerciseDTOs = dal.GetAllExerciseDTOs();
             Console.WriteLine(exerciseDTOs.ToString());
         }

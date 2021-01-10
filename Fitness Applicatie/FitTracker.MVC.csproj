@@ -12,7 +12,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Fitness_Applicatie_Logic\FitTracker.Logic.csproj" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LogicFactory\FitTracker.LogicFactory.csproj" />
+    <ProjectReference Include="..\LogicInterface\FitTracker.LogicInterface.csproj" />
   </ItemGroup>
 
 </Project>

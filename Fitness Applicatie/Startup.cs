@@ -39,6 +39,8 @@ namespace Fitness_Applicatie
                     options.LoginPath = "/account/login";
                     options.LogoutPath = "/account/logout";
                 });
+
+            string constring = Configuration.GetConnectionString("sefwef");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

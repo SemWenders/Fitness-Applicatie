@@ -22,7 +22,6 @@ namespace FitTracker.Persistence
             using (SqlConnection connection = new SqlConnection(GetConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand("INSERT INTO Users VALUES(@UserID, @Password, @Name)", connection);
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@UserID", userDTO.UserID);
                 cmd.Parameters.AddWithValue("@Password", userDTO.Password);
                 cmd.Parameters.AddWithValue("@Name", userDTO.Name);
@@ -43,7 +42,6 @@ namespace FitTracker.Persistence
             using (SqlConnection connection = new SqlConnection(GetConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand("SELECT * FROM Users", connection);
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 List<UserDTO> userDTOs = new List<UserDTO>();
                 connection.Open();
                 using(SqlDataReader reader = cmd.ExecuteReader())
@@ -66,7 +64,6 @@ namespace FitTracker.Persistence
             using (SqlConnection connection = new SqlConnection(GetConnectionString()))
             {
                 SqlCommand cmdUser = new SqlCommand("SELECT * FROM Users WHERE Name = @Name", connection);
-                cmdUser.CommandType = System.Data.CommandType.StoredProcedure;
                 cmdUser.Parameters.AddWithValue("@Name", username);
                 Guid userID = Guid.Empty;
                 string password = null;
@@ -82,7 +79,6 @@ namespace FitTracker.Persistence
 
                 List<TrainingDTO> trainingDTOs = new List<TrainingDTO>();
                 SqlCommand cmdTrainings = new SqlCommand("SELECT * FROM Trainings WHERE UserID = @UserID", connection);
-                cmdTrainings.CommandType = System.Data.CommandType.StoredProcedure;
                 cmdTrainings.Parameters.AddWithValue("@UserID", username);
 
                 using (SqlDataReader reader = cmdTrainings.ExecuteReader())

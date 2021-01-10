@@ -23,7 +23,6 @@ namespace FitTracker.Persistence
             using (SqlConnection connection = new SqlConnection(GetConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand("INSERT INTO Exercises VALUES(@ExerciseID, @Name, @UserID, @ExerciseType)", connection);
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@ExerciseID", exercise.ExerciseID);
                 cmd.Parameters.AddWithValue("@Name", exercise.Name);
                 cmd.Parameters.AddWithValue("@UserID", exercise.UserID);
@@ -40,7 +39,6 @@ namespace FitTracker.Persistence
             using (SqlConnection connection = new SqlConnection(GetConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand("DELETE FROM Exercises WHERE ExerciseID = @ExerciseID", connection);
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@ExerciseID", exerciseID);
 
                 connection.Open();
@@ -54,7 +52,6 @@ namespace FitTracker.Persistence
             using (SqlConnection connection = new SqlConnection(GetConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand("SELECT * FROM Exercises WHERE ExerciseID = @ExerciseID", connection);
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@ExerciseID", exerciseID);
                 connection.Open();
                 ExerciseTypeDTO exerciseTypeDTO = ExerciseTypeDTO.Bodyweight;
@@ -80,7 +77,6 @@ namespace FitTracker.Persistence
             using (SqlConnection connection = new SqlConnection(GetConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand("SELECT * FROM Exercises WHERE Name = @Name", connection);
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Name", exerciseName);
                 connection.Open();
                 ExerciseTypeDTO exerciseTypeDTO = ExerciseTypeDTO.Bodyweight;
@@ -107,7 +103,6 @@ namespace FitTracker.Persistence
             {
                 List<ExerciseDTO> exerciseDTOs = new List<ExerciseDTO>();
                 SqlCommand cmd = new SqlCommand("SELECT * FROM Exercises", connection);
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 connection.Open();
 
                 using (SqlDataReader reader = cmd.ExecuteReader())

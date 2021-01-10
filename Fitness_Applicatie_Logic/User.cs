@@ -4,10 +4,11 @@ using System.Text;
 using FitTracker.Interface.Interfaces;
 using FitTracker.Interface.DTOs;
 using FitTracker.Factory;
+using FitTracker.LogicInterface;
 
 namespace FitTracker.Logic
 {
-    public class User
+    public class User : IUser
     {
         //properties
         public string Name { get; private set; }
@@ -42,62 +43,63 @@ namespace FitTracker.Logic
         }
 
         //methods
-        public void AddExercise(Exercise exercise)
+        public void AddExercise(ExerciseDTO exercise)
         {
-            IExerciseDAL dal = ExerciseFactory.GetExerciseDAL();
-            ExerciseDTO exerciseDTO = ConvertExercise(exercise);
-            dal.AddExercise(exerciseDTO);
+            IExerciseDAL dal = ExerciseDALFactory.GetExerciseDAL();
+            dal.AddExercise(exercise);
         }
 
-        public void AddWeightTraining(WeightTraining training)
+        public ExerciseDTO GetExercise(string exerciseID)
         {
-            ITrainingDAL dal = TrainingFactory.GetTrainingDAL();
-            WeightTrainingDTO trainingDTO = ConvertWeightTraining(training);
-            dal.AddWeightTraining(trainingDTO);
+            IExerciseDAL dal = ExerciseDALFactory.GetExerciseDAL();
+            ExerciseDTO exercise = dal.GetExerciseDTO(exerciseID);
+            return exercise;
         }
 
-        public void AddCardioTraining(CardioTraining cardioTraining)
+        public void AddStrengthTraining(WeightTrainingDTO training)
         {
-            ITrainingDAL dal = TrainingFactory.GetTrainingDAL();
-            CardioTrainingDTO cardioTrainingDTO = ConvertCardioTraining(cardioTraining);
-            dal.AddCardioTraining(cardioTrainingDTO);
+            ITrainingDAL dal = TrainingDALFactory.GetTrainingDAL();
+            dal.AddWeightTraining(training);
         }
 
-        public void DeleteWeightTraining(WeightTraining weightTraining)
+        public void AddCardioTraining(CardioTrainingDTO cardioTraining)
         {
-            ITrainingDAL dal = TrainingFactory.GetTrainingDAL();
+            ITrainingDAL dal = TrainingDALFactory.GetTrainingDAL();
+            dal.AddCardioTraining(cardioTraining);
+        }
+
+        public void DeleteWeightTraining(WeightTrainingDTO weightTraining)
+        {
+            ITrainingDAL dal = TrainingDALFactory.GetTrainingDAL();
             dal.DeleteWeightTraining(weightTraining.TrainingID.ToString());
         }
 
         public List<TrainingDTO> GetUserTrainings()
         {
-            ITrainingDAL trainingDAL = TrainingFactory.GetTrainingDAL();
+            ITrainingDAL trainingDAL = TrainingDALFactory.GetTrainingDAL();
             List<TrainingDTO> trainings = trainingDAL.GetUserTrainings(UserID.ToString());
             return trainings;
         }
 
-        public WeightTraining GetWeightTraining(string trainingID)
+        public WeightTrainingDTO GetWeightTraining(string trainingID)
         {
-            ITrainingDAL trainingDAL = TrainingFactory.GetTrainingDAL();
-            WeightTrainingDTO trainingDTO = trainingDAL.GetWeightTraining(trainingID);
-            WeightTraining training = ConvertWeightTrainingDTO(trainingDTO); 
+            ITrainingDAL trainingDAL = TrainingDALFactory.GetTrainingDAL();
+            WeightTrainingDTO training = trainingDAL.GetWeightTraining(trainingID);
             return training;
         }
 
-        public CardioTraining GetCardioTraining(string trainingID)
+        public CardioTrainingDTO GetCardioTraining(string trainingID)
         {
-            ITrainingDAL trainingDAL = TrainingFactory.GetTrainingDAL();
-            CardioTrainingDTO cardioTrainingDTO = trainingDAL.GetCardioTraining(trainingID);
-            CardioTraining cardioTraining = ConvertCardioTrainingDTO(cardioTrainingDTO);
+            ITrainingDAL trainingDAL = TrainingDALFactory.GetTrainingDAL();
+            CardioTrainingDTO cardioTraining = trainingDAL.GetCardioTraining(trainingID);
             return cardioTraining;
         }
 
 
-        public Training GetTraining(string trainingID)
+        public TrainingDTO GetTraining(string trainingID)
         {
-            ITrainingDAL trainingDAL = TrainingFactory.GetTrainingDAL();
-            TrainingDTO trainingDTO = trainingDAL.GetTraining(trainingID);
-            Training training = ConvertTrainingDTO(trainingDTO);
+            ITrainingDAL trainingDAL = TrainingDALFactory.GetTrainingDAL();
+            TrainingDTO training = trainingDAL.GetTraining(trainingID);
             return training;
         }
 
@@ -143,7 +145,7 @@ namespace FitTracker.Logic
             {
                 sets.Add(ConvertSetDTO(setDTO));
             }
-            IExerciseDAL dal = ExerciseFactory.GetExerciseDAL();
+            IExerciseDAL dal = ExerciseDALFactory.GetExerciseDAL();
             Round round = new Round(
                 ConvertExerciseDTO(dal.GetExerciseDTO(roundDTO.ExerciseID.ToString())),
                 sets,
@@ -155,7 +157,8 @@ namespace FitTracker.Logic
         }
         private Set ConvertSetDTO(SetDTO setDTO)
         {
-            throw new NotImplementedException(); //TODO: fill in
+            Set set = new Set(setDTO.Weight, setDTO.SetOrder, setDTO.SetID);
+            return set;
         }
 
         private WeightTrainingDTO ConvertWeightTraining(WeightTraining training)
@@ -176,7 +179,7 @@ namespace FitTracker.Logic
             {
                 setDTOs.Add(ConvertSet(set));
             }
-            IExerciseDAL dal = ExerciseFactory.GetExerciseDAL();
+            IExerciseDAL dal = ExerciseDALFactory.GetExerciseDAL();
             RoundDTO roundDTO = new RoundDTO(
                 dal.GetExerciseDTO(round.ExerciseID.ToString()),
                 round.RoundID,

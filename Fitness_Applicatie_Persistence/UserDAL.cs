@@ -22,7 +22,6 @@ namespace FitTracker.Persistence
             using (SqlConnection connection = new SqlConnection(GetConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand("INSERT INTO Users VALUES(@UserID, @Password, @Name)", connection);
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@UserID", user.UserID);
                 cmd.Parameters.AddWithValue("@Password", user.Password);
                 cmd.Parameters.AddWithValue("@Name", user.Name);
@@ -38,7 +37,6 @@ namespace FitTracker.Persistence
             using (SqlConnection connection = new SqlConnection(GetConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand("DELETE FROM Users WHERE UserID = @UserID", connection);
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@UserID", userID);
 
                 connection.Open();
@@ -52,7 +50,6 @@ namespace FitTracker.Persistence
             using (SqlConnection connection = new SqlConnection(GetConnectionString()))
             {
                 SqlCommand cmd = new SqlCommand("SELECT * FROM Users WHERE UserID = @UserID", connection);
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@UserID", userID);
                 connection.Open();
                 string name = null;

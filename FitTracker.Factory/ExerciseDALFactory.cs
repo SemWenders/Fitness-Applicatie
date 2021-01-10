@@ -6,11 +6,11 @@ using FitTracker.Interface.Interfaces;
 
 namespace FitTracker.Factory
 {
-    public static class UserCollectionFactory
+    public static class ExerciseDALFactory
     {
-        public static IUserCollectionDAL GetUserCollectionDAL()
+        public static IExerciseDAL GetExerciseDAL()
         {
-            return new UserCollectionDAL();
+            return new ExerciseDAL();
         }
     }
 }

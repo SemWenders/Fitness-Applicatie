@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Fitness_Applicatie_Interface\FitTracker.Interface.csproj" />
+    <ProjectReference Include="..\Fitness_Applicatie_Interface\FitTracker.DALInterface.csproj" />
     <ProjectReference Include="..\Fitness_Applicatie_Persistence\FitTracker.Persistence.csproj" />
   </ItemGroup>
 

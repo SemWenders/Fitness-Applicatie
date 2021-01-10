@@ -15,8 +15,8 @@ namespace FitTracker.UnitTests
         [TestMethod]
         public void AddWeightTraining()
         {
-            ITrainingDAL trainingDal = TrainingFactory.GetTrainingDAL();
-            IExerciseDAL exerciseDAL = ExerciseFactory.GetExerciseDAL();
+            ITrainingDAL trainingDal = TrainingDALFactory.GetTrainingDAL();
+            IExerciseDAL exerciseDAL = ExerciseDALFactory.GetExerciseDAL();
             List<Round> rounds = new List<Round>
             {
                 new Round
@@ -85,7 +85,7 @@ namespace FitTracker.UnitTests
                 Rounds = rounds
             };
             User user = new User();
-            user.AddWeightTraining(weightTraining);
+            user.AddStrengthTraining(weightTraining);
         }
     }
 }

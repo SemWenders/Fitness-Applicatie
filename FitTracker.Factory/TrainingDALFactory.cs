@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using FitTracker.Persistence;
 using FitTracker.Interface.Interfaces;
+using FitTracker.Persistence;
 
 namespace FitTracker.Factory
 {
-    public static class ExerciseFactory
+    public static class TrainingDALFactory
     {
-        public static IExerciseDAL GetExerciseDAL()
+        public static ITrainingDAL GetTrainingDAL()
         {
-            return new ExerciseDAL();
+            return new TrainingDAL();
         }
     }
 }

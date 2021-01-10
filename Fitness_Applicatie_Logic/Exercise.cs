@@ -19,5 +19,10 @@ namespace FitTracker.Logic
             UserID = userID;
             ExerciseType = exerciseType;
         }
+
+        public Exercise()
+        {
+
+        }
     }
 }

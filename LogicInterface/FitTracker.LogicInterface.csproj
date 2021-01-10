@@ -6,8 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Fitness_Applicatie_Interface\FitTracker.DALInterface.csproj" />
-    <ProjectReference Include="..\FitTracker.Factory\FitTracker.DALFactory.csproj" />
-    <ProjectReference Include="..\LogicInterface\FitTracker.LogicInterface.csproj" />
   </ItemGroup>
 
 </Project>
