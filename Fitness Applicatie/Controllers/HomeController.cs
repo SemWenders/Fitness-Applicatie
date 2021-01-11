@@ -219,7 +219,7 @@ namespace Fitness_Applicatie.Controllers
         }
         private Set ConvertSetDTO(SetDTO setDTO)
         {
-            Set set = new Set(setDTO.Weight, setDTO.SetOrder, setDTO.SetID);
+            Set set = new Set(setDTO.Weight, setDTO.SetOrder, setDTO.SetID, setDTO.RoundID);
             return set;
         }
 

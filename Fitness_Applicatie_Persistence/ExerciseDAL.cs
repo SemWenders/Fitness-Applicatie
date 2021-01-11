@@ -121,5 +121,29 @@ namespace FitTracker.Persistence
                 }
             }
         }
+
+        public bool ExerciseExists(string exercisename)
+        {
+            using (SqlConnection connection = new SqlConnection(GetConnectionString()))
+            {
+                SqlCommand cmd = new SqlCommand("" +
+                    "SELECT COUNT(1) " +
+                    "FROM Exercises " +
+                    "WHERE Name = @ExerciseName", connection);
+                cmd.Parameters.AddWithValue("@ExerciseName", exercisename);
+                connection.Open();
+                
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+
+                if (count > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
     }
 }

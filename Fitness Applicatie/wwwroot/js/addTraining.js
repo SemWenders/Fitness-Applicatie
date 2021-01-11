@@ -26,7 +26,7 @@
     var setsLblClone = setsLBl.cloneNode(true);
     var SetsClone = Sets.cloneNode();
     SetsClone.id = "Rounds_" + nextExerciseGroupNumber + "__Sets_0__Weight";
-    SetsClone.name = "Rounds[" + nextExerciseGroupNumber + "].Sets[0].Name";
+    SetsClone.name = "Rounds[" + nextExerciseGroupNumber + "].Sets[0].Weight";
     var breakline1 = document.createElement("br");
     var breakline2 = document.createElement("br");
     var breakline3 = document.createElement("br");

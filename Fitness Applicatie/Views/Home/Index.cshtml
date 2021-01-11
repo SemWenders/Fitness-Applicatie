@@ -27,7 +27,7 @@
         @foreach (var training in Model.Trainings)
         {
             <div class="card">
-                <a asp-area="" asp-controller="Home" asp-action="TrainingDetail" asp-route-id="@training.TrainingID">
+                <a asp-area="" asp-controller="Training" asp-action="TrainingDetail" asp-route-id="@training.TrainingID">
                     <label style="text-align:center; margin-bottom: 0px; padding-bottom:10px; padding-top:10px">@training.Date.ToShortDateString()</label>
                 </a>
             </div>

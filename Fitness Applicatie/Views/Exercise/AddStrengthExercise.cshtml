@@ -1,0 +1,39 @@
+﻿@model Fitness_Applicatie.Models.ExerciseViewModel
+
+@{ 
+    ViewData["Title"] = "Add Exercise";
+}
+
+<div class="row">
+    <div class="col-4">
+
+    </div>
+
+    <div class="col-4">
+        @using (Html.BeginForm("AddStrengthExercise", "Exercise", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "setContent()" }))
+        {
+            <div class="form-group text-center">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" />
+            </div>
+            <br />
+            <div class="form-group text-center">
+                <label asp-for="ExerciseType">What kind of exercise is it?</label>
+                <br />
+                <input type="radio" name="exerciseType" asp-for="ExerciseType" value="Bodyweight" />Bodyweight
+                <input type="radio" name="exerciseType" asp-for="ExerciseType" value="Weighted" />Weighted
+                <input type="radio" name="exerciseType" asp-for="ExerciseType" value="Cardio" />Cardio
+            </div>
+            <div class="form-group text-center">
+                <input type="submit" value="Add" class="btn-danger" />
+            </div>
+            <div class="text-danger text-center">
+                @Html.ValidationMessageFor(vm => vm.Name)
+            </div>
+        }
+    </div>
+
+    <div class="col-4">
+
+    </div>
+</div>

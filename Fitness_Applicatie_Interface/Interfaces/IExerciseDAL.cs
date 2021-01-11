@@ -12,5 +12,6 @@ namespace FitTracker.Interface.Interfaces
         public ExerciseDTO GetExerciseDTOByName(string exerciseName);
         public List<ExerciseDTO> GetAllExerciseDTOs();
         void DeleteExercise(string exerciseID);
+        public bool ExerciseExists(string exercisename);
     }
 }

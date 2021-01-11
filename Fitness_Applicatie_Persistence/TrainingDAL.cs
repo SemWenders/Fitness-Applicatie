@@ -189,13 +189,13 @@ namespace FitTracker.Persistence
                         List<SetDTO> sets = new List<SetDTO>();
                         using (SqlDataReader setReader = cmdSet.ExecuteReader())
                         {
-                            while(reader.Read())
+                            while(setReader.Read())
                             {
                                 Guid setID = Guid.Parse(setReader["SetID"].ToString());
                                 int setOrder = Convert.ToInt32(setReader["SetOrder"]);
                                 double weight = Convert.ToInt32(setReader["Weight"]);
 
-                                SetDTO setDTO = new SetDTO(weight, setID, setOrder);
+                                SetDTO setDTO = new SetDTO(weight, setID, setOrder, roundID);
                                 sets.Add(setDTO);
                             }
                         }
@@ -260,12 +260,13 @@ namespace FitTracker.Persistence
             {
                 SqlCommand cmd = new SqlCommand("" +
                     "INSERT INTO Trainings " +
-                    "VALUES(@TrainingID, @UserID, @Date) " +
+                    "VALUES(@TrainingID, @UserID, @Date, @TrainingType) " +
                     "INSERT INTO WeightTrainings " +
                     "VALUES(@TrainingID)", connection);
                 cmd.Parameters.AddWithValue("@TrainingID", trainingDTO.TrainingID);
                 cmd.Parameters.AddWithValue("@UserID", trainingDTO.UserID);
                 cmd.Parameters.AddWithValue("@Date", trainingDTO.Date);
+                cmd.Parameters.AddWithValue("@TrainingType", TrainingTypeDTO.Strength);
 
                 connection.Open();
                 cmd.ExecuteNonQuery();

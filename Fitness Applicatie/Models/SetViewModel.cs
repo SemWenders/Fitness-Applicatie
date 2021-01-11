@@ -11,5 +11,6 @@ namespace Fitness_Applicatie.Models
         public double Weight { get; set; }
         public int SetOrder { get; set; }
         public Guid SetID { get; set; }
+        public Guid RoundID { get; set; }
     }
 }

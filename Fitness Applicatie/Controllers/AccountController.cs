@@ -41,7 +41,7 @@ namespace Fitness_Applicatie.Controllers
             User user = ConvertUserDTO(userCollection.GetUser(accountViewModel.UserName));
 
             //check if user exists
-            if (user == null)
+            if (String.IsNullOrEmpty(user.Name))
             {
                 ModelState.AddModelError("", "Username or password is incorrect");
                 return View(accountViewModel);

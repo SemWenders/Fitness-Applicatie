@@ -157,7 +157,7 @@ namespace FitTracker.Logic
         }
         private Set ConvertSetDTO(SetDTO setDTO)
         {
-            Set set = new Set(setDTO.Weight, setDTO.SetOrder, setDTO.SetID);
+            Set set = new Set(setDTO.Weight, setDTO.SetOrder, setDTO.SetID, setDTO.RoundID);
             return set;
         }
 
@@ -191,7 +191,7 @@ namespace FitTracker.Logic
 
         private SetDTO ConvertSet(Set set)
         {
-            SetDTO setDTO = new SetDTO(set.Weight, set.SetID, set.SetOrder);
+            SetDTO setDTO = new SetDTO(set.Weight, set.SetID, set.SetOrder, set.RoundID);
             return setDTO;
         }
 
