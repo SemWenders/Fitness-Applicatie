@@ -32,6 +32,12 @@
                         </li>
                     </ul>
                 </div>
+                <div class="login-container ml-auto d-inline-flex">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
+                    }
+                </div>
             </div>
         </nav>
     </header>
