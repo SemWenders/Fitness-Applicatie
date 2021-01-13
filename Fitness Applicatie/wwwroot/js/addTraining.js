@@ -23,10 +23,12 @@
     var ExerciseNameClone = ExerciseName.cloneNode();
     ExerciseNameClone.id = "Rounds_" + nextExerciseGroupNumber + "__Exercise_Name";
     ExerciseNameClone.name = "Rounds[" + nextExerciseGroupNumber + "].Exercise.Name";
+    ExerciseNameClone.value = "";
     var setsLblClone = setsLBl.cloneNode(true);
     var SetsClone = Sets.cloneNode();
     SetsClone.id = "Rounds_" + nextExerciseGroupNumber + "__Sets_0__Weight";
     SetsClone.name = "Rounds[" + nextExerciseGroupNumber + "].Sets[0].Weight";
+    SetsClone.value = "";
     var breakline1 = document.createElement("br");
     var breakline2 = document.createElement("br");
     var breakline3 = document.createElement("br");
@@ -76,6 +78,7 @@ function addSetField(button_id) {
     var SetsClone = Sets.cloneNode(true);
     SetsClone.id = "Rounds_" + exerciseGroupNumber + "__Sets_" + setNumber + "__Weight";
     SetsClone.name = "Rounds[" + exerciseGroupNumber + "].Sets[" + setNumber + "].Weight";
+    SetsClone.value = "";
     var addSetButtonClone = addSetButton.cloneNode(true);
     addSetButtonClone.id = "addSetButton@" + exerciseGroupNumber + "_" + setNumber;
     var breakline = document.createElement("br");
