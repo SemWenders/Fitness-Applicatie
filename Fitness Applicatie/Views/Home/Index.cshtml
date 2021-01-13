@@ -38,3 +38,17 @@
 
     </div>
 </div>
+
+@if (Convert.ToBoolean(TempData["JustAddedTraining"]))
+{
+    <script>
+        alert("Training succesfully added!");
+    </script>
+}
+
+@if (Convert.ToBoolean(TempData["JustAddedExercise"]))
+{
+    <script>
+        alert("Exercise succesfully added!");
+    </script>
+}

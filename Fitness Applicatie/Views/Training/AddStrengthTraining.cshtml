@@ -36,3 +36,10 @@
 </div>
 
 <button hidden id="addSetButtonFormat" onclick="addSetField(this.id);return false" type="button">Add set</button>
+@Html.ValidationMessageFor(m => m.Rounds)
+@if (Convert.ToBoolean(TempData["Error"]))
+{
+    <script>
+        alert("Something went wrong");
+    </script>
+}

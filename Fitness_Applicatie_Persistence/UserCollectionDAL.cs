@@ -67,6 +67,7 @@ namespace FitTracker.Persistence
                 cmdUser.Parameters.AddWithValue("@Name", username);
                 Guid userID = Guid.Empty;
                 string password = null;
+                string name = null;
                 connection.Open();
                 using (SqlDataReader reader = cmdUser.ExecuteReader())
                 {
@@ -74,6 +75,7 @@ namespace FitTracker.Persistence
                     {
                         userID = Guid.Parse(reader["UserID"].ToString());
                         password = reader["Password"].ToString();
+                        name = reader["Name"].ToString();
                     }
                 }
 
@@ -92,8 +94,33 @@ namespace FitTracker.Persistence
                         trainingDTOs.Add(training);
                     }
                 }
-                UserDTO userDTO = new UserDTO(username, userID, password, trainingDTOs, null);
+                UserDTO userDTO = new UserDTO(name, userID, password, trainingDTOs, null);
                 return userDTO;
+            }
+        }
+
+        public bool DoesUserExist(string username)
+        {
+            using (SqlConnection connection = new SqlConnection(GetConnectionString()))
+            {
+                SqlCommand cmd = new SqlCommand(
+                    "SELECT COUNT(1) " +
+                    "FROM Users " +
+                    "WHERE Name = @Name", connection);
+                cmd.Parameters.AddWithValue("@Name", username);
+                connection.Open();
+
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+
+                if (count > 0)
+                {
+                    return true;
+                }
+
+                else
+                {
+                    return false;
+                }
             }
         }
     }

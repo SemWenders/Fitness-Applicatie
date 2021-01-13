@@ -25,24 +25,33 @@ namespace Fitness_Applicatie.Controllers
         [HttpPost]
         public IActionResult AddStrengthExercise(Models.ExerciseViewModel exerciseViewModel)
         {
-            User user = new User();
-            Exercise exercise = new Exercise();
-            ExerciseDTO exerciseDTO = new ExerciseDTO(Guid.NewGuid(), exerciseViewModel.Name, Guid.Parse(User.FindFirst("Id").Value), (ExerciseTypeDTO)exerciseViewModel.ExerciseType);
-            if (String.IsNullOrEmpty(exerciseViewModel.Name) || exerciseViewModel.ExerciseType.ToString() == "Empty")
+            try
             {
-                ModelState.AddModelError("Name", "Fill in all fields please");
-                return View(exerciseViewModel);
+                User user = new User();
+                Exercise exercise = new Exercise();
+                ExerciseDTO exerciseDTO = new ExerciseDTO(Guid.NewGuid(), exerciseViewModel.Name, Guid.Parse(User.FindFirst("Id").Value), (ExerciseTypeDTO)exerciseViewModel.ExerciseType);
+                if (String.IsNullOrEmpty(exerciseViewModel.Name) || exerciseViewModel.ExerciseType.ToString() == "Empty")
+                {
+                    ModelState.AddModelError("Name", "Fill in all fields please");
+                    return View(exerciseViewModel);
+                }
+                if (exercise.ExerciseExists(exerciseViewModel.Name))
+                {
+                    ModelState.AddModelError("Name", "Exercise already exists");
+                    return View(exerciseViewModel);
+                }
+                else
+                {
+                    user.AddExercise(exerciseDTO);
+                    TempData["JustAddedExercise"] = true;
+                }
+                return LocalRedirect("/Home/Index");
             }
-            if (exercise.ExerciseExists(exerciseViewModel.Name))
+            catch
             {
-                ModelState.AddModelError("Name", "Exercise already exists");
-                return View(exerciseViewModel);
+                TempData["Error"] = true;
+                return LocalRedirect("/Home/Index");
             }
-            else
-            {
-                user.AddExercise(exerciseDTO);
-            }
-            return LocalRedirect("/Home/Index");
         }
     }
 }

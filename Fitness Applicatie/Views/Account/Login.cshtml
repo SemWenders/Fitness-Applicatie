@@ -24,3 +24,14 @@
     </div>
 }
 
+<div class="col-12 text-danger text-center">
+    @Html.ValidationMessageFor(m => m.UserName)
+    @Html.ValidationMessageFor(m => m.Password)
+</div>
+
+@if (Convert.ToBoolean(TempData["Error"]))
+{
+    <script>
+        alert("Something went wrong");
+    </script>
+}

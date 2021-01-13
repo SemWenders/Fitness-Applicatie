@@ -13,53 +13,90 @@ namespace Fitness_Applicatie.Controllers
     public class TrainingController : Controller
     {
         [Authorize]
-        public IActionResult AddTraining()
+        public IActionResult AddStrengthTraining()
         {
             return View();
         }
         [Authorize]
         public IActionResult TrainingDetail(Guid id)
         {
-            User user = new User();
-            TrainingViewModel trainingVM = ConvertTrainingDTO(user.GetTraining(id.ToString()));
-            
-            if (trainingVM.TrainingType == TrainingType.Strength)
+            try
             {
-                WeightTrainingDTO weightTrainingDTO = user.GetWeightTraining(id.ToString());
-                List<RoundViewModel> roundViewModels = new List<RoundViewModel>();
-                foreach (var roundDTO in weightTrainingDTO.GetRounds())
+                User user = new User();
+                TrainingViewModel trainingVM = ConvertTrainingDTO(user.GetTraining(id.ToString()));
+
+                if (trainingVM.TrainingType == TrainingType.Strength)
                 {
-                    roundViewModels.Add(ConvertRoundDTO(roundDTO));
+                    WeightTrainingDTO weightTrainingDTO = user.GetWeightTraining(id.ToString());
+                    List<RoundViewModel> roundViewModels = new List<RoundViewModel>();
+                    foreach (var roundDTO in weightTrainingDTO.GetRounds())
+                    {
+                        roundViewModels.Add(ConvertRoundDTO(roundDTO));
+                    }
+                    trainingVM.Rounds = roundViewModels;
                 }
-                trainingVM.Rounds = roundViewModels;
+
+                else
+                {
+                    //TODO: CardioTraining detail
+                }
+                return View(trainingVM);
             }
 
-            else
+            catch
             {
-
+                TempData["Error"] = true;
+                return LocalRedirect("/Home/Index");
             }
-            return View(trainingVM);
+            
         }
 
         [HttpPost]
         public IActionResult AddStrengthTraining(TrainingViewModel trainingViewModel)
         {
-            //TODO: set textboxes of sets to empty
-            List<RoundDTO> rounds = new List<RoundDTO>();
-            Guid trainingID = Guid.NewGuid();
-            foreach (var roundViewModel in trainingViewModel.Rounds)
+            try
             {
-                roundViewModel.TrainingID = trainingID;
+                foreach (var round in trainingViewModel.Rounds)
+                {
+                    if (String.IsNullOrEmpty(round.Exercise.Name))
+                    {
+                        ModelState.AddModelError("Rounds", "Fill in the exercise names");
+                        return View(trainingViewModel);
+                    }
+                    foreach (var set in round.Sets)
+                    {
+                        if (set.Weight == 0)
+                        {
+                            ModelState.AddModelError("Rounds", "Please fill in all the weights");
+                            return View(trainingViewModel);
+                        }
+                    }
+                }
+                List<RoundDTO> rounds = new List<RoundDTO>();
+                Guid trainingID = Guid.NewGuid();
+                foreach (var roundViewModel in trainingViewModel.Rounds)
+                {
+                    roundViewModel.TrainingID = trainingID;
+                }
+                foreach (var roundViewModel in trainingViewModel.Rounds)
+                {
+                    rounds.Add(ConvertRoundVM(roundViewModel));
+                }
+
+                WeightTrainingDTO weightTraining = new WeightTrainingDTO(rounds, trainingID, Guid.Parse(User.FindFirst("Id").Value), DateTime.Now, TrainingTypeDTO.Strength);
+                UserCollection userCollection = new UserCollection();
+                User user = ConvertUserDTO(userCollection.GetUser(User.Identity.Name));
+                user.AddStrengthTraining(weightTraining);
+                TempData["JustAddedTraining"] = true;
+                return LocalRedirect("/Home/Index");
             }
-            foreach (var roundViewModel in trainingViewModel.Rounds)
+
+            catch
             {
-                rounds.Add(ConvertRoundVM(roundViewModel));
+                TempData["Error"] = true;
+                return LocalRedirect("/Training/AddTraining");
             }
-            WeightTrainingDTO weightTraining = new WeightTrainingDTO(rounds, trainingID, Guid.Parse(User.FindFirst("Id").Value), DateTime.Now, TrainingTypeDTO.Strength);
-            UserCollection userCollection = new UserCollection();
-            User user = ConvertUserDTO(userCollection.GetUser(User.Identity.Name));
-            user.AddStrengthTraining(weightTraining);
-            return LocalRedirect("/Home/Index");
+            
         }
 
         private RoundDTO ConvertRoundVM(RoundViewModel roundViewModel)

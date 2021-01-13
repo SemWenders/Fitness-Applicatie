@@ -60,6 +60,12 @@ namespace FitTracker.Logic
         {
 
         }
+
+        public bool DoesUserExist(string username)
+        {
+            IUserCollectionDAL dal = UserCollectionDALFactory.GetUserCollectionDAL();
+            return dal.DoesUserExist(username);
+        }
         private UserDTO ConvertUser(User user)
         {
             UserDTO userDTO = new UserDTO(user.Name, user.UserID, user.Password, ConvertTraining(user.GetTrainings()), ConvertExercise(user.GetExercises()));

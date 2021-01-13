@@ -35,37 +35,51 @@ namespace Fitness_Applicatie.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel accountViewModel)
         {
-            if (!ModelState.IsValid) return View(accountViewModel);
-
-            UserCollection userCollection = new UserCollection();
-            User user = ConvertUserDTO(userCollection.GetUser(accountViewModel.UserName));
-
-            //check if user exists
-            if (String.IsNullOrEmpty(user.Name))
+            try
             {
-                ModelState.AddModelError("", "Username or password is incorrect");
+                if (!ModelState.IsValid) return View(accountViewModel);
+
+                if (String.IsNullOrEmpty(accountViewModel.UserName) || String.IsNullOrEmpty(accountViewModel.Password))
+                {
+                    ModelState.AddModelError("Username", "Please fill in a username and password");
+                    return View(accountViewModel);
+                }
+                UserCollection userCollection = new UserCollection();
+                User user = ConvertUserDTO(userCollection.GetUser(accountViewModel.UserName));
+
+                //check if user exists
+                if (String.IsNullOrEmpty(user.Name))
+                {
+                    ModelState.AddModelError("Username", "Username or password is incorrect");
+                    return View(accountViewModel);
+                }
+
+                //check password
+                var hasher = new PasswordHasher<User>();
+                if (hasher.VerifyHashedPassword(user, user.Password, accountViewModel.Password) == PasswordVerificationResult.Failed)
+                {
+                    ModelState.AddModelError("Password", "Username or password is incorrect");
+                    return View(accountViewModel);
+                }
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.Name),
+                    new Claim("Id", user.UserID.ToString())
+                };
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var userPrincipal = new ClaimsPrincipal(new[] { claimsIdentity });
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal);
+                return LocalRedirect("/Home/Index");
+            }
+
+            catch
+            {
+                TempData["Error"] = true;
                 return View(accountViewModel);
             }
 
-            //check password
-            var hasher = new PasswordHasher<User>();
-            if (hasher.VerifyHashedPassword(user, user.Password, accountViewModel.Password) == PasswordVerificationResult.Failed)
-            {
-                ModelState.AddModelError("", "Username of password is incorrect");
-                return View(accountViewModel);
-            }
-
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.Name),
-                new Claim("Id", user.UserID.ToString())
-            };
-
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var userPrincipal = new ClaimsPrincipal(new[] { claimsIdentity });
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, userPrincipal);
-            return LocalRedirect("/Home/Index");
         }
 
         [HttpPost]
@@ -73,14 +87,39 @@ namespace Fitness_Applicatie.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(LoginViewModel loginViewModel)
         {
-            var hasher = new PasswordHasher<User>();
-            User tempUser = new User();
-            string hashedPW = hasher.HashPassword(tempUser, loginViewModel.Password);
-            UserCollection userCollection = new UserCollection();
-            User user = new User(loginViewModel.UserName, Guid.NewGuid(), hashedPW, null, null);
-            userCollection.AddUser(ConvertUser(user));
+            try
+            {
+                UserCollection userCollection = new UserCollection();
+                if (userCollection.DoesUserExist(loginViewModel.UserName))
+                {
+                    ModelState.Clear();
+                    ModelState.AddModelError("Username", "Username is already used");
+                    return View(loginViewModel);
+                }
 
-            return LocalRedirect("/Account/Login");
+                if (loginViewModel.Password.Length < 8)
+                {
+                    ModelState.Clear();
+                    ModelState.AddModelError("Password", "Password needs to be at least 8 characters long");
+                    return View(loginViewModel);
+                }
+                else
+                {
+                    var hasher = new PasswordHasher<User>();
+                    User tempUser = new User();
+                    string hashedPW = hasher.HashPassword(tempUser, loginViewModel.Password);
+                    User user = new User(loginViewModel.UserName, Guid.NewGuid(), hashedPW, null, null);
+                    userCollection.AddUser(ConvertUser(user));
+
+                    return LocalRedirect("/Account/Login");
+                }
+            }
+            catch
+            {
+                TempData["Error"] = true;
+                return View(loginViewModel);
+            }
+            
         }
 
         private User ConvertUserDTO(UserDTO userDTO)

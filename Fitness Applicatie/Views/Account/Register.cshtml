@@ -16,4 +16,10 @@
             <input type="submit" value="Register" />
         </div>
     </div>
+    <div class="row text-danger text-center">
+        <div class="col-12" style="text-align:center">
+            @Html.ValidationMessageFor(m => m.UserName)
+            @Html.ValidationMessageFor(m => m.Password)
+        </div>
+    </div> 
 }
