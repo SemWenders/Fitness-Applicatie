@@ -15,10 +15,15 @@
 
     else if (Model.TrainingType == TrainingType.Cardio)
     {
-        <p>@Model.Date.ToLongDateString()</p>
+        <b>@Model.Date.ToLongDateString()</b>
+        <br />
+        <br />
+        <b>Exercise</b>
         <p>@Model.Exercise.Name</p>
+        <b>Distance</b>
         <p>@Model.Distance</p>
-        <p>@Model.Time</p>
+        <b>Time</b>
+        <p>@Model.Minutes:@Model.Seconds</p>
     }
 
     else

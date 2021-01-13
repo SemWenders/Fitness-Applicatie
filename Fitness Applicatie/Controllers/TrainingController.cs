@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using FitTracker.Logic;
 using FitTracker.Interface.DTOs;
+using FitTracker.LogicInterface;
+using LogicFactory;
+using FitTracker.LogicFactory;
 
 namespace Fitness_Applicatie.Controllers
 {
@@ -17,6 +20,13 @@ namespace Fitness_Applicatie.Controllers
         {
             return View();
         }
+
+        [Authorize]
+        public IActionResult AddCardioTraining()
+        {
+            return View();
+        }
+
         [Authorize]
         public IActionResult TrainingDetail(Guid id)
         {
@@ -38,7 +48,12 @@ namespace Fitness_Applicatie.Controllers
 
                 else
                 {
-                    //TODO: CardioTraining detail
+                    CardioTrainingDTO cardioTrainingDTO = user.GetCardioTraining(id.ToString());
+                    trainingVM.Exercise = ConvertExerciseDTOToVM(cardioTrainingDTO.Exercise);
+                    trainingVM.Distance = cardioTrainingDTO.Distance;
+                    trainingVM.Minutes = cardioTrainingDTO.Time.Minutes;
+                    trainingVM.Seconds = cardioTrainingDTO.Time.Seconds;
+                    trainingVM.TrainingID = cardioTrainingDTO.TrainingID;
                 }
                 return View(trainingVM);
             }
@@ -94,9 +109,29 @@ namespace Fitness_Applicatie.Controllers
             catch
             {
                 TempData["Error"] = true;
-                return LocalRedirect("/Training/AddTraining");
+                return LocalRedirect("/Training/AddStrengthTraining");
             }
             
+        }
+
+        [HttpPost]
+        public IActionResult AddCardioTraining(TrainingViewModel trainingViewModel)
+        {
+            try
+            {
+                IUser user = UserFactory.GetUser();
+                IUserCollection userCollection = UserCollectionFactory.GetUserCollection();
+                ExerciseDTO exerciseDTO = userCollection.GetExercise(trainingViewModel.Exercise.Name);
+                CardioTrainingDTO cardioTrainingDTO = new CardioTrainingDTO(exerciseDTO, trainingViewModel.Distance, new TimeSpan(0, trainingViewModel.Minutes, trainingViewModel.Seconds), Guid.NewGuid(), Guid.Parse(User.FindFirst("Id").Value), DateTime.Now, TrainingTypeDTO.Cardio);
+                user.AddCardioTraining(cardioTrainingDTO);
+                return LocalRedirect("/Home/Index");
+            }
+
+            catch
+            {
+                TempData["Error"] = true;
+                return LocalRedirect("/Training/AddCardioTraining");
+            }
         }
 
         private RoundDTO ConvertRoundVM(RoundViewModel roundViewModel)

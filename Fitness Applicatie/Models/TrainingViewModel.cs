@@ -9,11 +9,12 @@ namespace Fitness_Applicatie.Models
     public class TrainingViewModel
     {
         public Guid TrainingID { get; set; }
-        public Exercise Exercise { get; set; }
+        public ExerciseViewModel Exercise { get; set; }
         public List<RoundViewModel> Rounds { get; set; }
         public DateTime Date { get; set; }
         public decimal Distance { get; set; }
-        public TimeSpan Time { get; set; }
+        public int Minutes { get; set; }
+        public int Seconds { get; set; }
         public TrainingType TrainingType { get; set; }
     }
 }

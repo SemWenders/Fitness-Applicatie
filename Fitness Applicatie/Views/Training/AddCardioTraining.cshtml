@@ -1,0 +1,35 @@
+﻿@model Fitness_Applicatie.Models.TrainingViewModel
+@{
+    ViewData["Title"] = "Add Cardio Training";
+}
+
+<div class="row">
+    <div class="col-3">
+
+    </div>
+    <div class="col-6">
+        @using (Html.BeginForm("AddCardioTraining", "Training", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <label asp-for="Exercise.Name">Exercise:</label>
+            <input asp-for="Exercise.Name" /> <br />
+            <label asp-for="Minutes">Minutes:</label>
+            <input asp-for="Minutes" /> <br />
+            <label asp-for="Seconds">Seconds:</label>
+            <input asp-for="Seconds" /> <br />
+            <label asp-for="Distance">Distance (in kilometers):</label>
+            <input asp-for="Distance" />
+
+            <br />
+            <input type="submit" value="Add" />
+        }
+    </div>
+    <div class="col-3">
+
+    </div>
+</div>
+@if (Convert.ToBoolean(TempData["Error"]))
+{
+    <script>
+        alert("Something went wrong");
+    </script>
+}

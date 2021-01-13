@@ -68,9 +68,10 @@ namespace Fitness_Applicatie.Controllers
             else if (training.TrainingType == TrainingType.Cardio)
             {
                 CardioTraining cardioTraining = ConvertCardioTrainingDTO(user.GetCardioTraining(id));
-                trainingViewModel.Exercise = cardioTraining.Exercise;
+                trainingViewModel.Exercise = ConvertExerciseToVM(cardioTraining.Exercise);
                 trainingViewModel.Distance = cardioTraining.Distance;
-                trainingViewModel.Time = cardioTraining.Time;
+                trainingViewModel.Minutes = cardioTraining.Time.Minutes;
+                trainingViewModel.Seconds = cardioTraining.Time.Seconds;
                 trainingViewModel.TrainingID = cardioTraining.TrainingID;
                 trainingViewModel.TrainingType = cardioTraining.TrainingType;
             }
@@ -128,6 +129,19 @@ namespace Fitness_Applicatie.Controllers
             Exercise exercise = new Exercise(exerciseDTO.ExerciseID, exerciseDTO.Name, exerciseDTO.UserID, (ExerciseType)exerciseDTO.ExerciseType);
             return exercise;
         }
+
+        private ExerciseViewModel ConvertExerciseToVM(Exercise exercise)
+        {
+            ExerciseViewModel exerciseViewModel = new ExerciseViewModel
+            {
+                ExerciseID = exercise.ExerciseID,
+                ExerciseType = (ExerciseType)exercise.ExerciseType,
+                Name = exercise.Name,
+                UserID = exercise.UserID
+            };
+            return exerciseViewModel;
+        }
+
         private List<ExerciseDTO> ConvertExercises(List<Exercise> exercises)
         {
             List<ExerciseDTO> exerciseDTOs = new List<ExerciseDTO>();

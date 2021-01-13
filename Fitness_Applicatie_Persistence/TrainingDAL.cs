@@ -222,7 +222,6 @@ namespace FitTracker.Persistence
                 Guid userID = Guid.Empty;
                 ExerciseDTO exercise = new ExerciseDTO();
                 decimal distance = 0;
-                TimeSpan time = TimeSpan.MinValue;
                 TrainingTypeDTO trainingType = TrainingTypeDTO.Cardio;
 
                 connection.Open();
@@ -237,20 +236,21 @@ namespace FitTracker.Persistence
                 }
 
                 SqlCommand cmdCardioTraining = new SqlCommand("SELECT * FROM CardioTrainings WHERE TrainingID = @TrainingID", connection);
-                cmdTraining.Parameters.AddWithValue("@TrainingID", connection);
+                cmdCardioTraining.Parameters.AddWithValue("@TrainingID", trainingID);
 
-                using (SqlDataReader reader = cmdTraining.ExecuteReader())
+                using (SqlDataReader cardioReader = cmdCardioTraining.ExecuteReader())
                 {
-                    while(reader.Read())
+                    while(cardioReader.Read())
                     {
-                        exercise = GetExerciseDTO(reader["ExerciseID"].ToString());
-                        distance = Convert.ToDecimal(reader["Distance"]);
-                        time = TimeSpan.Parse(reader["Time"].ToString());
+                        distance = Convert.ToDecimal(cardioReader["Distance"].ToString());
+                        exercise = GetExerciseDTO(cardioReader["ExerciseID"].ToString());
+                        long ticks = Convert.ToInt64(cardioReader["Time"].ToString());
+                        TimeSpan time = new TimeSpan(ticks);
+                        CardioTrainingDTO cardioTrainingDTO = new CardioTrainingDTO(exercise, distance, time, Guid.Parse(trainingID), userID, date, trainingType);
+                        return cardioTrainingDTO;
                     }
                 }
-
-                CardioTrainingDTO cardioTrainingDTO = new CardioTrainingDTO(exercise, distance, time, Guid.Parse(trainingID), userID, date, trainingType);
-                return cardioTrainingDTO;
+                return null;
             }
         }
 
@@ -308,15 +308,16 @@ namespace FitTracker.Persistence
             {
                 SqlCommand cmd = new SqlCommand("" +
                     "INSERT INTO Trainings " +
-                    "VALUES(@TrainingID, @UserID, @Date) " +
+                    "VALUES(@TrainingID, @UserID, @Date, @TrainingType) " +
                     "INSERT INTO CardioTrainings " +
                     "VALUES(@TrainingID, @ExerciseID, @Distance, @Time)", connection);
                 cmd.Parameters.AddWithValue("@TrainingID", trainingDTO.TrainingID);
                 cmd.Parameters.AddWithValue("@ExerciseID", trainingDTO.Exercise.ExerciseID);
                 cmd.Parameters.AddWithValue("@Distance", trainingDTO.Distance);
-                cmd.Parameters.AddWithValue("@Time", trainingDTO.Time);
+                cmd.Parameters.AddWithValue("@Time", trainingDTO.Time.Ticks);
                 cmd.Parameters.AddWithValue("@Date", trainingDTO.Date);
                 cmd.Parameters.AddWithValue("@UserID", trainingDTO.UserID);
+                cmd.Parameters.AddWithValue("@TrainingType", trainingDTO.TrainingType);
 
                 connection.Open();
                 cmd.ExecuteNonQuery();

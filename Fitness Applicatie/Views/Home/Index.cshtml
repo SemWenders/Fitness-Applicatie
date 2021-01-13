@@ -52,3 +52,10 @@
         alert("Exercise succesfully added!");
     </script>
 }
+
+@if (Convert.ToBoolean(TempData["Error"]))
+{
+    <script>
+        alert("Something went wrong");
+    </script>
+}
