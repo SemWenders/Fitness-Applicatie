@@ -5,11 +5,18 @@
     {
         foreach (var round in Model.Rounds)
         {
-            <p>@round.Exercise.Name</p>
+            <b>@round.Exercise.Name</b>
             for (int i = 1; i <= round.Sets.Count; i++)
             {
                 <p>Set @i : @round.Sets[i - 1].Weight</p>
             }
+        }
+
+        @using (Html.BeginForm("DeleteTraining", "Training", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(m => m.TrainingID)
+            @Html.HiddenFor(m => m.TrainingType)
+            <input type="submit" value="Delete Training" class="btn-danger" />
         }
     }
 
@@ -24,6 +31,13 @@
         <p>@Model.Distance</p>
         <b>Time</b>
         <p>@Model.Minutes:@Model.Seconds</p>
+
+        @using (Html.BeginForm("DeleteTraining", "Training", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.HiddenFor(m => m.TrainingID)
+            @Html.HiddenFor(m => m.TrainingType)
+            <input type="submit" value="Delete Training" class="btn-danger" />
+        }
     }
 
     else

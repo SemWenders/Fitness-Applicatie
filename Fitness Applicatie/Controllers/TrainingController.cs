@@ -98,7 +98,7 @@ namespace Fitness_Applicatie.Controllers
                     rounds.Add(ConvertRoundVM(roundViewModel));
                 }
 
-                WeightTrainingDTO weightTraining = new WeightTrainingDTO(rounds, trainingID, Guid.Parse(User.FindFirst("Id").Value), DateTime.Now, TrainingTypeDTO.Strength);
+                WeightTrainingDTO weightTraining = new WeightTrainingDTO(rounds, trainingID, Guid.Parse(User.FindFirst("Id").Value), new DateTime(2021, 1, 15), TrainingTypeDTO.Strength);
                 UserCollection userCollection = new UserCollection();
                 User user = ConvertUserDTO(userCollection.GetUser(User.Identity.Name));
                 user.AddStrengthTraining(weightTraining);
@@ -124,6 +124,7 @@ namespace Fitness_Applicatie.Controllers
                 ExerciseDTO exerciseDTO = userCollection.GetExercise(trainingViewModel.Exercise.Name);
                 CardioTrainingDTO cardioTrainingDTO = new CardioTrainingDTO(exerciseDTO, trainingViewModel.Distance, new TimeSpan(0, trainingViewModel.Minutes, trainingViewModel.Seconds), Guid.NewGuid(), Guid.Parse(User.FindFirst("Id").Value), DateTime.Now, TrainingTypeDTO.Cardio);
                 user.AddCardioTraining(cardioTrainingDTO);
+                TempData["JustAddedTraining"] = true;
                 return LocalRedirect("/Home/Index");
             }
 
@@ -132,6 +133,22 @@ namespace Fitness_Applicatie.Controllers
                 TempData["Error"] = true;
                 return LocalRedirect("/Training/AddCardioTraining");
             }
+        }
+
+        [HttpPost]
+        public IActionResult DeleteTraining(TrainingViewModel trainingViewModel)
+        {
+            User user = new User();
+            if (trainingViewModel.TrainingType == TrainingType.Strength)
+            {
+                user.DeleteWeightTraining(trainingViewModel.TrainingID.ToString());
+            }
+
+            else
+            {
+                user.DeleteCardioTraining(trainingViewModel.TrainingID.ToString());
+            }
+            return LocalRedirect("/Home/Index");
         }
 
         private RoundDTO ConvertRoundVM(RoundViewModel roundViewModel)

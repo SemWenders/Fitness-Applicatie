@@ -70,7 +70,7 @@ namespace FitTracker.Persistence
                 cmdWeightTraining.ExecuteNonQuery();
                 connection.Close();
 
-                SqlCommand cmdTraining = new SqlCommand("DELETE FROM Trainings WHERE TrainingID = @TrainingID", connection);
+                SqlCommand cmdTraining = new SqlCommand("DELETE FROM Trainings WHERE ID = @TrainingID", connection);
                 cmdTraining.Parameters.AddWithValue("@TrainingID", trainingID);
 
                 connection.Open();
@@ -83,18 +83,18 @@ namespace FitTracker.Persistence
         {
             using (SqlConnection connection = new SqlConnection(GetConnectionString()))
             {
-                SqlCommand cmdTraining = new SqlCommand("DELETE FROM Trainings WHERE TrainingID = @TrainingID", connection);
-                cmdTraining.Parameters.AddWithValue("@TrainingID", trainingID);
-
-                connection.Open();
-                cmdTraining.ExecuteNonQuery();
-                connection.Close();
-
                 SqlCommand cmdCardioTraining = new SqlCommand("DELETE FROM CardioTrainings WHERE TrainingID = @TrainingID", connection);
                 cmdCardioTraining.Parameters.AddWithValue("@TrainingID", trainingID);
 
                 connection.Open();
                 cmdCardioTraining.ExecuteNonQuery();
+                connection.Close();
+
+                SqlCommand cmdTraining = new SqlCommand("DELETE FROM Trainings WHERE ID = @TrainingID", connection);
+                cmdTraining.Parameters.AddWithValue("@TrainingID", trainingID);
+
+                connection.Open();
+                cmdTraining.ExecuteNonQuery();
                 connection.Close();
             }
         }

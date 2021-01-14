@@ -113,10 +113,8 @@ namespace Fitness_Applicatie.Controllers
                 }
                 else
                 {
-                    var hasher = new PasswordHasher<User>();
-                    User tempUser = new User();
-                    string hashedPW = hasher.HashPassword(tempUser, loginViewModel.Password);
-                    User user = new User(loginViewModel.UserName, Guid.NewGuid(), hashedPW, null, null);
+                    
+                    User user = new User(loginViewModel.UserName, Guid.NewGuid(), loginViewModel.Password, null, null);
                     userCollection.AddUser(ConvertUser(user));
 
                     return LocalRedirect("/Account/Login");

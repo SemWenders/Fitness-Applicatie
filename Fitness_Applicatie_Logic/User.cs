@@ -68,10 +68,16 @@ namespace FitTracker.Logic
             dal.AddCardioTraining(cardioTraining);
         }
 
-        public void DeleteWeightTraining(WeightTrainingDTO weightTraining)
+        public void DeleteWeightTraining(string trainingID)
         {
             ITrainingDAL dal = TrainingDALFactory.GetTrainingDAL();
-            dal.DeleteWeightTraining(weightTraining.TrainingID.ToString());
+            dal.DeleteWeightTraining(trainingID);
+        }
+
+        public void DeleteCardioTraining(string trainingiD)
+        {
+            ITrainingDAL dal = TrainingDALFactory.GetTrainingDAL();
+            dal.DeleteCardioTraining(trainingiD);
         }
 
         public List<TrainingDTO> GetUserTrainings()

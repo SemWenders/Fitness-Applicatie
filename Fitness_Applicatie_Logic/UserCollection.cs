@@ -5,6 +5,7 @@ using FitTracker.Interface.Interfaces;
 using FitTracker.Factory;
 using FitTracker.Interface.DTOs;
 using FitTracker.LogicInterface;
+using Microsoft.AspNetCore.Identity;
 
 namespace FitTracker.Logic
 {
@@ -20,8 +21,12 @@ namespace FitTracker.Logic
 
         public void AddUser(UserDTO user)
         {
+            var hasher = new PasswordHasher<User>();
+            User tempUser = new User();
+            string hashedPW = hasher.HashPassword(tempUser, user.Password);
+            UserDTO hashedPwUser = new UserDTO(user.Name, user.UserID, hashedPW, null, null);
             IUserCollectionDAL dal = UserCollectionDALFactory.GetUserCollectionDAL();
-            dal.AddUser(user);
+            dal.AddUser(hashedPwUser);
         }
 
 
