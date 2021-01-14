@@ -183,7 +183,7 @@ namespace FitTracker.Persistence
                         ExerciseDTO exercise = GetExerciseDTO(exerciseID.ToString());
                         Guid roundID = Guid.Parse(reader["ID"].ToString());
 
-                        SqlCommand cmdSet = new SqlCommand("SELECT * FROM Sets WHERE RoundID = @RoundID", connection);
+                        SqlCommand cmdSet = new SqlCommand("SELECT * FROM Sets WHERE RoundID = @RoundID ORDER BY SetOrder", connection);
                         cmdSet.Parameters.AddWithValue("@RoundID", roundID);
 
                         List<SetDTO> sets = new List<SetDTO>();

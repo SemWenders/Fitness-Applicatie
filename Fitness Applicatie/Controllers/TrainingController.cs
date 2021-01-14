@@ -161,6 +161,7 @@ namespace Fitness_Applicatie.Controllers
             }
             foreach (var set in roundViewModel.Sets)
             {
+                set.SetOrder = roundViewModel.Sets.IndexOf(set);
                 sets.Add(ConvertSetVM(set));
             }
             UserCollection userCollection = new UserCollection();
