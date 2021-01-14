@@ -61,9 +61,10 @@ namespace FitTracker.Logic
             return users;
         }
 
-        public void DeleteExercise(ExerciseDTO exercise)
+        public void DeleteExercise(string exerciseID)
         {
-
+            IExerciseDAL dal = ExerciseDALFactory.GetExerciseDAL();
+            dal.DeleteExercise(exerciseID);
         }
 
         public bool DoesUserExist(string username)

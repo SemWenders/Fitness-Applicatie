@@ -12,7 +12,7 @@ namespace FitTracker.LogicInterface
         public UserDTO GetUser(string username);
         public ExerciseDTO GetExercise(string exerciseName);
         public List<UserDTO> GetAllUsers();
-        public void DeleteExercise(ExerciseDTO exercise);
+        public void DeleteExercise(string exerciseID);
         public bool DoesUserExist(string username);
 
     }

@@ -13,7 +13,7 @@ using System.IO;
 namespace FitTracker.UnitTests
 {
     [TestClass]
-    public class TrainingDALTests
+    public class TrainingTests
     {
         [TestMethod]
         public void AddWeightTraining()
