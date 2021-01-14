@@ -18,7 +18,8 @@
             <input asp-for="Seconds" /> <br />
             <label asp-for="Distance">Distance (in kilometers):</label>
             <input asp-for="Distance" />
-
+            <br />
+            @Html.ValidationMessageFor(m => m.Exercise)
             <br />
             <input type="submit" value="Add" />
         }

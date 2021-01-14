@@ -50,7 +50,7 @@ namespace Fitness_Applicatie.Controllers
                 {
                     CardioTrainingDTO cardioTrainingDTO = user.GetCardioTraining(id.ToString());
                     trainingVM.Exercise = ConvertExerciseDTOToVM(cardioTrainingDTO.Exercise);
-                    trainingVM.Distance = cardioTrainingDTO.Distance;
+                    trainingVM.Distance = Math.Round(cardioTrainingDTO.Distance, 2);
                     trainingVM.Minutes = cardioTrainingDTO.Time.Minutes;
                     trainingVM.Seconds = cardioTrainingDTO.Time.Seconds;
                     trainingVM.TrainingID = cardioTrainingDTO.TrainingID;
@@ -119,6 +119,12 @@ namespace Fitness_Applicatie.Controllers
         {
             try
             {
+                if (String.IsNullOrEmpty(trainingViewModel.Exercise.Name))
+                {
+                    ModelState.AddModelError("Exercise", "Please fill in an exercise");
+                    return View(trainingViewModel);
+                }
+
                 IUser user = UserFactory.GetUser();
                 IUserCollection userCollection = UserCollectionFactory.GetUserCollection();
                 ExerciseDTO exerciseDTO = userCollection.GetExercise(trainingViewModel.Exercise.Name);
