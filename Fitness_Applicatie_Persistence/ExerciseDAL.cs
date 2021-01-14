@@ -6,17 +6,17 @@ using FitTracker.Interface.DTOs;
 using FitTracker.Interface.Interfaces;
 using System.Configuration;
 using Microsoft.Extensions.Configuration;
-using System.IO;    
+using System.IO;
 
 namespace FitTracker.Persistence
 {
     public class ExerciseDAL : IExerciseDAL
     {
-        //string connectionString = "Data Source=LAPTOP-7SORRU5A; Initial Catalog=FitTracker; Integrated Security=SSPI;";
         private string GetConnectionString()
         {
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-            return builder.Build().GetConnectionString("DefaultConnection");
+            string constring = builder.Build().GetConnectionString("DefaultConnection");
+            return constring;
         }
         public void AddExercise(ExerciseDTO exercise)
         {
@@ -78,6 +78,7 @@ namespace FitTracker.Persistence
             {
                 SqlCommand cmd = new SqlCommand("SELECT * FROM Exercises WHERE Name = @Name", connection);
                 cmd.Parameters.AddWithValue("@Name", exerciseName);
+                string path = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None).FilePath;
                 connection.Open();
                 ExerciseTypeDTO exerciseTypeDTO = ExerciseTypeDTO.Bodyweight;
                 string exerciseID = null;

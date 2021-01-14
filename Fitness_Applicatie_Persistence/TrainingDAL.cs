@@ -12,7 +12,6 @@ namespace FitTracker.Persistence
 {
     public class TrainingDAL : ITrainingDAL
     {
-        //string connectionString = "Data Source=LAPTOP-7SORRU5A; Initial Catalog=FitTracker; Integrated Security=SSPI;";
         private string GetConnectionString()
         {
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);

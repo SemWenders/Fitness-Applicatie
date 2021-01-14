@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using System.Text;
 using FitTracker.Interface.Interfaces;
 using FitTracker.Interface.DTOs;
-using FitTracker.Factory;
-using FitTracker.Logic;
+using FitTracker.LogicFactory;
+using LogicFactory;
+using FitTracker.LogicInterface;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace FitTracker.UnitTests
 {
@@ -15,77 +18,63 @@ namespace FitTracker.UnitTests
         [TestMethod]
         public void AddWeightTraining()
         {
-            ITrainingDAL trainingDal = TrainingDALFactory.GetTrainingDAL();
-            IExerciseDAL exerciseDAL = ExerciseDALFactory.GetExerciseDAL();
-            List<Round> rounds = new List<Round>
+            IUser user = UserFactory.GetUser();
+            IUserCollection userCollection = UserCollectionFactory.GetUserCollection();
+            Guid trainingID = Guid.NewGuid();
+            Guid deadliftRoundID = Guid.NewGuid();
+            Guid squatRoundID = Guid.NewGuid();
+            Guid pullupRoundID = Guid.NewGuid();
+            ExerciseDTO deadlift = userCollection.GetExercise("Deadlift");
+            ExerciseDTO squat = userCollection.GetExercise("Squat");
+            ExerciseDTO pullup = userCollection.GetExercise("Pullup");
+            List<SetDTO> deadliftSets = new List<SetDTO>
             {
-                new Round
-                {
-                    RoundID = Guid.NewGuid(),
-                    ExerciseID = trainingDal.GetExerciseID("Deadlift"),
-                    Sets = new List<Set>
-                    {
-                        new Set
-                        {
-                            SetID = Guid.NewGuid(),
-                            SetOrder = 0,
-                            Weight = 80
-                        },
-
-                        new Set
-                        {
-                            SetID = Guid.NewGuid(),
-                            SetOrder = 1,
-                            Weight = 82.5
-                        },
-
-                        new Set
-                        {
-                            SetID = Guid.NewGuid(),
-                            SetOrder = 2,
-                            Weight = 85
-                        }
-                    }
-                },
-
-                new Round
-                {
-                    RoundID = Guid.NewGuid(),
-                    ExerciseID = trainingDal.GetExerciseID("Squat"),
-                    Sets = new List<Set>
-                    {
-                        new Set
-                        {
-                            SetID = Guid.NewGuid(),
-                            SetOrder = 0,
-                            Weight = 55
-                        },
-
-                        new Set
-                        {
-                            SetID = Guid.NewGuid(),
-                            SetOrder = 1,
-                            Weight = 57.5
-                        },
-
-                        new Set
-                        {
-                            SetID = Guid.NewGuid(),
-                            SetOrder = 2,
-                            Weight = 60
-                        }
-                    }
-                }
+                new SetDTO(80, Guid.NewGuid(), 0, deadliftRoundID),
+                new SetDTO(85, Guid.NewGuid(), 1, deadliftRoundID),
+                new SetDTO(90, Guid.NewGuid(), 2, deadliftRoundID)
             };
-            WeightTraining weightTraining = new WeightTraining()
+
+            List<SetDTO> squatSets = new List<SetDTO>
             {
-                Date = DateTime.Parse("22-12-2020"),
-                TrainingID = Guid.NewGuid(),
-                UserID = "TestAccount",
-                Rounds = rounds
+                new SetDTO(50, Guid.NewGuid(), 0, squatRoundID),
+                new SetDTO(55, Guid.NewGuid(), 1, squatRoundID),
+                new SetDTO(60, Guid.NewGuid(), 2, squatRoundID)
             };
-            User user = new User();
-            user.AddStrengthTraining(weightTraining);
+
+            List<SetDTO> pullupSets = new List<SetDTO>
+            {
+                new SetDTO(7, Guid.NewGuid(), 0, pullupRoundID),
+                new SetDTO(7, Guid.NewGuid(), 1, pullupRoundID),
+                new SetDTO(7, Guid.NewGuid(), 2, pullupRoundID)
+            };
+
+            List<RoundDTO> rounds = new List<RoundDTO>
+            {
+                new RoundDTO(deadlift, deadliftRoundID, trainingID, deadlift.ExerciseID, deadliftSets),
+                new RoundDTO(squat, squatRoundID, trainingID, squat.ExerciseID, squatSets),
+                new RoundDTO(pullup, pullupRoundID, trainingID, pullup.ExerciseID, pullupSets)
+            };
+
+            WeightTrainingDTO weightTrainingDTO = new WeightTrainingDTO(rounds, trainingID, Guid.Parse("94E1E099-538F-4E9E-830A-04952A2DD682"), DateTime.Now, TrainingTypeDTO.Strength);
+            user.AddStrengthTraining(weightTrainingDTO);
+        }
+
+        [TestMethod]
+        public void AddCardioTraining()
+        {
+            IUser user = UserFactory.GetUser();
+            IUserCollection userCollection = UserCollectionFactory.GetUserCollection();
+            ExerciseDTO exerciseDTO = userCollection.GetExercise("Running");
+            CardioTrainingDTO cardioTrainingDTO = new CardioTrainingDTO(
+                exerciseDTO, 
+                5.44M, 
+                new TimeSpan(0, 28, 45), 
+                Guid.NewGuid(), 
+                Guid.Parse("94E1E099-538F-4E9E-830A-04952A2DD682"), 
+                DateTime.Now, 
+                TrainingTypeDTO.Cardio);
+
+            user.AddCardioTraining(cardioTrainingDTO);
         }
     }
 }
