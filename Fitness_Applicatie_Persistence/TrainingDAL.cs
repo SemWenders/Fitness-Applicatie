@@ -104,7 +104,7 @@ namespace FitTracker.Persistence
             List<TrainingDTO> trainings = new List<TrainingDTO>();
             using (SqlConnection connection = new SqlConnection(GetConnectionString()))
             {
-                SqlCommand cmd = new SqlCommand("SELECT * FROM Trainings WHERE UserID = @UserID", connection);
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Trainings WHERE UserID = @UserID ORDER BY Date DESC", connection);
                 cmd.Parameters.AddWithValue("@UserID", userID);
 
                 connection.Open();
