@@ -8,7 +8,7 @@ namespace FitTracker.LogicInterface
     public interface IUserCollection
     {
         public void AddUser(UserDTO user);
-        void DeleteUser();
+        void DeleteUser(string userID);
         public UserDTO GetUser(string username);
         public ExerciseDTO GetExercise(string exerciseName);
         public List<UserDTO> GetAllUsers();

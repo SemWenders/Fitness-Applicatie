@@ -21,6 +21,12 @@ namespace FitTracker.Interface.DTOs
             this.exercises = exercises;
         }
 
+        public UserDTO(string name, string password)
+        {
+            Name = name;
+            Password = password;
+        }
+
         public List<TrainingDTO> GetTrainings()
         {
             return trainings;

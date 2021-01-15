@@ -30,9 +30,10 @@ namespace FitTracker.Logic
         }
 
 
-        public void DeleteUser()
+        public void DeleteUser(string userID)
         {
-
+            IUserCollectionDAL dal = UserCollectionDALFactory.GetUserCollectionDAL();
+            dal.DeleteUser(userID);
         }
 
         public List<UserDTO> Users()

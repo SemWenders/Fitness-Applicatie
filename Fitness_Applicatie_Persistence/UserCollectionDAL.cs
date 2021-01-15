@@ -32,9 +32,17 @@ namespace FitTracker.Persistence
             }
         }
 
-        public void DeleteUser(string userID)
+        public void DeleteUser(string username)
         {
-            throw new NotImplementedException();
+            using (SqlConnection connection = new SqlConnection(GetConnectionString()))
+            {
+                SqlCommand cmd = new SqlCommand("DELETE FROM Users WHERE Name = @Name", connection);
+                cmd.Parameters.AddWithValue("@Name", username);
+
+                connection.Open();
+                cmd.ExecuteNonQuery();
+                connection.Close();
+            }
         }
 
         public List<UserDTO> GetAllUsers()

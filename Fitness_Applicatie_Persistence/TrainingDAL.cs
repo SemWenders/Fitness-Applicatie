@@ -229,7 +229,7 @@ namespace FitTracker.Persistence
                     while(reader.Read())
                     {
                         date = Convert.ToDateTime(reader["Date"]);
-                        userID = Guid.Parse(trainingID);
+                        userID = Guid.Parse(reader["UserID"].ToString());
                         trainingType = (TrainingTypeDTO)Enum.Parse(typeof(TrainingTypeDTO), reader["TrainingType"].ToString());
                     }
                 }
