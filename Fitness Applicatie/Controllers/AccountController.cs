@@ -114,7 +114,7 @@ namespace Fitness_Applicatie.Controllers
                 else
                 {
                     
-                    User user = new User(loginViewModel.UserName, Guid.NewGuid(), loginViewModel.Password, null, null);
+                    User user = new User(loginViewModel.UserName, loginViewModel.Password);
                     userCollection.AddUser(ConvertUser(user));
 
                     return LocalRedirect("/Account/Login");

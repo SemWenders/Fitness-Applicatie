@@ -29,7 +29,7 @@ namespace Fitness_Applicatie.Controllers
             {
                 User user = new User();
                 Exercise exercise = new Exercise();
-                ExerciseDTO exerciseDTO = new ExerciseDTO(Guid.NewGuid(), exerciseViewModel.Name, Guid.Parse(User.FindFirst("Id").Value), (ExerciseTypeDTO)exerciseViewModel.ExerciseType);
+                ExerciseDTO exerciseDTO = new ExerciseDTO(exerciseViewModel.Name, Guid.Parse(User.FindFirst("Id").Value), (ExerciseTypeDTO)exerciseViewModel.ExerciseType);
                 if (String.IsNullOrEmpty(exerciseViewModel.Name) || exerciseViewModel.ExerciseType.ToString() == "Empty")
                 {
                     ModelState.AddModelError("Name", "Fill in all fields please");

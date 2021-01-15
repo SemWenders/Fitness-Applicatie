@@ -88,17 +88,12 @@ namespace Fitness_Applicatie.Controllers
                     }
                 }
                 List<RoundDTO> rounds = new List<RoundDTO>();
-                Guid trainingID = Guid.NewGuid();
-                foreach (var roundViewModel in trainingViewModel.Rounds)
-                {
-                    roundViewModel.TrainingID = trainingID;
-                }
                 foreach (var roundViewModel in trainingViewModel.Rounds)
                 {
                     rounds.Add(ConvertRoundVM(roundViewModel));
                 }
 
-                WeightTrainingDTO weightTraining = new WeightTrainingDTO(rounds, trainingID, Guid.Parse(User.FindFirst("Id").Value), new DateTime(2021, 1, 15), TrainingTypeDTO.Strength);
+                WeightTrainingDTO weightTraining = new WeightTrainingDTO(rounds, Guid.Parse(User.FindFirst("Id").Value), new DateTime(2021, 1, 15), TrainingTypeDTO.Strength);
                 UserCollection userCollection = new UserCollection();
                 User user = ConvertUserDTO(userCollection.GetUser(User.Identity.Name));
                 user.AddStrengthTraining(weightTraining);
@@ -128,7 +123,7 @@ namespace Fitness_Applicatie.Controllers
                 IUser user = UserFactory.GetUser();
                 IUserCollection userCollection = UserCollectionFactory.GetUserCollection();
                 ExerciseDTO exerciseDTO = userCollection.GetExercise(trainingViewModel.Exercise.Name);
-                CardioTrainingDTO cardioTrainingDTO = new CardioTrainingDTO(exerciseDTO, trainingViewModel.Distance, new TimeSpan(0, trainingViewModel.Minutes, trainingViewModel.Seconds), Guid.NewGuid(), Guid.Parse(User.FindFirst("Id").Value), DateTime.Now, TrainingTypeDTO.Cardio);
+                CardioTrainingDTO cardioTrainingDTO = new CardioTrainingDTO(exerciseDTO, trainingViewModel.Distance, new TimeSpan(0, trainingViewModel.Minutes, trainingViewModel.Seconds), Guid.Parse(User.FindFirst("Id").Value), DateTime.Now, TrainingTypeDTO.Cardio);
                 user.AddCardioTraining(cardioTrainingDTO);
                 TempData["JustAddedTraining"] = true;
                 return LocalRedirect("/Home/Index");
@@ -160,11 +155,6 @@ namespace Fitness_Applicatie.Controllers
         private RoundDTO ConvertRoundVM(RoundViewModel roundViewModel)
         {
             List<SetDTO> sets = new List<SetDTO>();
-            Guid roundID = Guid.NewGuid();
-            foreach (var set in roundViewModel.Sets)
-            {
-                set.RoundID = roundID;
-            }
             foreach (var set in roundViewModel.Sets)
             {
                 set.SetOrder = roundViewModel.Sets.IndexOf(set);
@@ -172,7 +162,7 @@ namespace Fitness_Applicatie.Controllers
             }
             UserCollection userCollection = new UserCollection();
             ExerciseDTO exercise = userCollection.GetExercise(roundViewModel.Exercise.Name);
-            RoundDTO round = new RoundDTO(exercise, roundID, roundViewModel.TrainingID, exercise.ExerciseID, sets);
+            RoundDTO round = new RoundDTO(exercise, exercise.ExerciseID, sets);
             return round;
         }
 
@@ -196,14 +186,8 @@ namespace Fitness_Applicatie.Controllers
 
         private SetDTO ConvertSetVM(SetViewModel setViewModel)
         {
-            SetDTO set = new SetDTO(setViewModel.Weight, Guid.NewGuid(), setViewModel.SetOrder, setViewModel.RoundID);
+            SetDTO set = new SetDTO(setViewModel.Weight, setViewModel.SetOrder);
             return set;
-        }
-
-        private Exercise ConvertExerciseVM(ExerciseViewModel exerciseViewModel)
-        {
-            Exercise exercise = new Exercise(exerciseViewModel.ExerciseID, exerciseViewModel.Name, exerciseViewModel.UserID, exerciseViewModel.ExerciseType);
-            return exercise;
         }
 
         private Exercise ConvertExerciseDTO(ExerciseDTO exerciseDTO)
@@ -216,7 +200,6 @@ namespace Fitness_Applicatie.Controllers
         {
             ExerciseViewModel exerciseViewModel = new ExerciseViewModel
             {
-                ExerciseID = exerciseDTO.ExerciseID,
                 ExerciseType = (ExerciseType)exerciseDTO.ExerciseType,
                 Name = exerciseDTO.Name,
                 UserID = exerciseDTO.UserID

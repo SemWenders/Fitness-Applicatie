@@ -3,6 +3,9 @@
 @{
     if (Model.TrainingType == TrainingType.Strength)
     {
+        <b>@Model.Date.ToLongDateString()</b>
+        <br />
+        <br />
         foreach (var round in Model.Rounds)
         {
             <b>@round.Exercise.Name</b>

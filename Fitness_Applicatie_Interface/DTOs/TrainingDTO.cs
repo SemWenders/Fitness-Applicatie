@@ -19,6 +19,12 @@ namespace FitTracker.Interface.DTOs
             TrainingType = trainingTypeDTO;
         }
 
+        public TrainingDTO(Guid userID, DateTime date, TrainingTypeDTO trainingTypeDTO)
+        {
+            UserID = userID;
+            Date = date;
+            TrainingType = trainingTypeDTO;
+        }
         public TrainingDTO()
         {
 

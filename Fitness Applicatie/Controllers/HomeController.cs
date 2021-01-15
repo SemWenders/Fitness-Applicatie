@@ -134,7 +134,6 @@ namespace Fitness_Applicatie.Controllers
         {
             ExerciseViewModel exerciseViewModel = new ExerciseViewModel
             {
-                ExerciseID = exercise.ExerciseID,
                 ExerciseType = (ExerciseType)exercise.ExerciseType,
                 Name = exercise.Name,
                 UserID = exercise.UserID

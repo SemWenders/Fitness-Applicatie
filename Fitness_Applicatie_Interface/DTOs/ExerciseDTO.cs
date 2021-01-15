@@ -19,6 +19,13 @@ namespace FitTracker.Interface.DTOs
             ExerciseType = exerciseType;
         }
 
+        public ExerciseDTO(string name, Guid userID, ExerciseTypeDTO exerciseType)
+        {
+            Name = name;
+            UserID = userID;
+            ExerciseType = exerciseType;
+        }
+
         public ExerciseDTO()
         {
 

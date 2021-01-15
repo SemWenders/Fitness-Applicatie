@@ -24,7 +24,7 @@ namespace FitTracker.Logic
             var hasher = new PasswordHasher<User>();
             User tempUser = new User();
             string hashedPW = hasher.HashPassword(tempUser, user.Password);
-            UserDTO hashedPwUser = new UserDTO(user.Name, user.UserID, hashedPW, null, null);
+            UserDTO hashedPwUser = new UserDTO(user.Name, Guid.NewGuid(), hashedPW, null, null);
             IUserCollectionDAL dal = UserCollectionDALFactory.GetUserCollectionDAL();
             dal.AddUser(hashedPwUser);
         }

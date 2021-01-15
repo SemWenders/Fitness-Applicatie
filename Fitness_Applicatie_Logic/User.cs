@@ -37,6 +37,12 @@ namespace FitTracker.Logic
             this.exercises = exercises;
         }
 
+        public User(string name, string password)
+        {
+            Name = name;
+            Password = password;
+        }
+
         public User()
         {
 
@@ -46,7 +52,8 @@ namespace FitTracker.Logic
         public void AddExercise(ExerciseDTO exercise)
         {
             IExerciseDAL dal = ExerciseDALFactory.GetExerciseDAL();
-            dal.AddExercise(exercise);
+            ExerciseDTO exerciseToAdd = new ExerciseDTO(Guid.NewGuid(), exercise.Name, exercise.UserID, exercise.ExerciseType);
+            dal.AddExercise(exerciseToAdd);
         }
 
         public ExerciseDTO GetExercise(string exerciseID)
@@ -59,13 +66,29 @@ namespace FitTracker.Logic
         public void AddStrengthTraining(WeightTrainingDTO training)
         {
             ITrainingDAL dal = TrainingDALFactory.GetTrainingDAL();
-            dal.AddWeightTraining(training);
+            Guid trainingID = Guid.NewGuid();
+            List<RoundDTO> rounds = new List<RoundDTO>();
+            foreach (var round in training.GetRounds())
+            {
+                Guid roundID = Guid.NewGuid();
+                List<SetDTO> sets = new List<SetDTO>();
+                foreach (var set in round.GetSets())
+                {
+                    SetDTO setToAdd = new SetDTO(set.Weight, Guid.NewGuid(), set.SetOrder, roundID);
+                    sets.Add(setToAdd);
+                }
+                RoundDTO roundToAdd = new RoundDTO(round.Exercise, roundID, trainingID, round.ExerciseID, sets);
+                rounds.Add(roundToAdd);
+            }
+            WeightTrainingDTO weightTrainingToAdd = new WeightTrainingDTO(rounds, trainingID, training.UserID, training.Date, training.TrainingType);
+            dal.AddWeightTraining(weightTrainingToAdd);
         }
 
         public void AddCardioTraining(CardioTrainingDTO cardioTraining)
         {
             ITrainingDAL dal = TrainingDALFactory.GetTrainingDAL();
-            dal.AddCardioTraining(cardioTraining);
+            CardioTrainingDTO cardioTrainingToAdd = new CardioTrainingDTO(cardioTraining.Exercise, cardioTraining.Distance, cardioTraining.Time, Guid.NewGuid(), cardioTraining.UserID, cardioTraining.Date, cardioTraining.TrainingType);
+            dal.AddCardioTraining(cardioTrainingToAdd);
         }
 
         public void DeleteWeightTraining(string trainingID)

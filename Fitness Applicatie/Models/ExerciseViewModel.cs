@@ -9,7 +9,6 @@ namespace Fitness_Applicatie.Models
 {
     public class ExerciseViewModel
     {
-        public Guid ExerciseID { get; set; }
         public string Name { get; set; }
         public Guid UserID { get; set; }
         public ExerciseType ExerciseType { get; set; }

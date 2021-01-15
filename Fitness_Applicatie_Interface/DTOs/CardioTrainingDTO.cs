@@ -16,5 +16,12 @@ namespace FitTracker.Interface.DTOs
             Distance = distance;
             Time = time;
         }
+
+        public CardioTrainingDTO(ExerciseDTO exercise, decimal distance, TimeSpan time, Guid userID, DateTime date, TrainingTypeDTO trainingTypeDTO) : base(userID, date, trainingTypeDTO)
+        {
+            Exercise = exercise;
+            Distance = distance;
+            Time = time;
+        }
     }
 }

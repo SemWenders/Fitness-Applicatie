@@ -18,5 +18,11 @@ namespace FitTracker.Interface.DTOs
             SetOrder = setOrder;
             RoundID = roundID;
         }
+
+        public SetDTO(double weight, int setOrder)
+        {
+            Weight = weight;
+            SetOrder = setOrder;
+        }
     }
 }

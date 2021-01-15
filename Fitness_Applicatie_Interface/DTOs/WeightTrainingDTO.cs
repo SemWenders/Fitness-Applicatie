@@ -14,6 +14,10 @@ namespace FitTracker.Interface.DTOs
             this.rounds = rounds;
         }
 
+        public WeightTrainingDTO(List<RoundDTO> rounds, Guid userID, DateTime date, TrainingTypeDTO trainingTypeDTO) : base(userID, date, trainingTypeDTO)
+        {
+            this.rounds = rounds;
+        }
         public WeightTrainingDTO()
         {
 
