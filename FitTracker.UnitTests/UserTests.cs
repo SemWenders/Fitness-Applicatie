@@ -12,35 +12,83 @@ namespace FitTracker.UnitTests
     [TestClass]
     public class UserTests
     {
+        [ClassCleanup]
+        public static void CleanTests()
+        {
+            IUserCollection userCollection = UserCollectionFactory.GetUserCollection();
+            userCollection.DeleteUser("AddUserTest");
+            userCollection.DeleteUser("GetUserTest");
+            userCollection.DeleteUser("GetAllUsersTest");
+            userCollection.DeleteUser("DoesUserExistTest");
+        }
+
         [TestMethod]
         public void AddUser()
         {
-            UserDTO userDTO = new UserDTO("NewUser", Guid.NewGuid(), "password", null, null);
+            //arrange
             IUserCollection userCollection = UserCollectionFactory.GetUserCollection();
+            UserDTO userDTO = new UserDTO("AddUserTest", "AddUserTestPassword");
+
+            //act
             userCollection.AddUser(userDTO);
+
+            //assert
+            UserDTO userFromDB = userCollection.GetUser(userDTO.Name);
+
+            Assert.AreEqual(userDTO.Name, userFromDB.Name);
         }
 
         [TestMethod]
         public void GetUser()
         {
+            //arrange
             IUserCollection userCollection = UserCollectionFactory.GetUserCollection();
-            UserDTO userDTO = userCollection.GetUser("TestAccount");
-            Assert.AreEqual(userDTO.UserID, Guid.Parse("94E1E099-538F-4E9E-830A-04952A2DD682"));
+            UserDTO userDTO = new UserDTO("GetUserTest", "AddUserTestPassword");
+            userCollection.AddUser(userDTO);
+
+            //act
+            UserDTO userFromDB = userCollection.GetUser("GetUserTest");
+
+            //assert
+
+            Assert.AreEqual(userDTO.Name, userFromDB.Name);
         }
 
         [TestMethod]
         public void GetAllUser()
         {
+            //arrange
             IUserCollection userCollection = UserCollectionFactory.GetUserCollection();
+            UserDTO userDTO = new UserDTO("GetAllUsersTest", "AddUserTestPassword");
+            userCollection.AddUser(userDTO);
+
+            //act
             List<UserDTO> userDTOs = userCollection.GetAllUsers();
+
+            //assertt
+            List<string> names = new List<string>();
+            foreach (var user in userDTOs)
+            {
+                names.Add(user.Name);
+            }
+            bool contains = names.Contains(userDTO.Name);
+            Assert.AreEqual(true, contains);
         }
 
         [TestMethod]
         public void DoesUserExist()
         {
+            //arrange
             IUserCollection userCollection = UserCollectionFactory.GetUserCollection();
-            bool exists = userCollection.DoesUserExist("TestAccount");
+            UserDTO userDTO = new UserDTO("DoesUserExistTest", "AddUserTestPassword");
+            userCollection.AddUser(userDTO);
+
+            //act
+            bool exists = userCollection.DoesUserExist("DoesUserExistTest");
+
+            //assert
             Assert.AreEqual(exists, true);
+
         }
     }
 }
