@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Fitness Applicatie\FitTracker.MVC.csproj" />
     <ProjectReference Include="..\LogicFactory\FitTracker.LogicFactory.csproj" />
     <ProjectReference Include="..\LogicInterface\FitTracker.LogicInterface.csproj" />
   </ItemGroup>
